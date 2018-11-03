@@ -46,7 +46,7 @@ def saveFile(event=None):
     if file_path == 'Untitled':
         saveAsFile()
     else:
-        file = open(file_path, 'w')
+        file = open(str(file_path), 'w')
         file.write(str(editArea.get(1.0, END)))
         file.close()
         root.title(file_path)
