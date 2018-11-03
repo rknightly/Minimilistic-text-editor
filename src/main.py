@@ -10,7 +10,6 @@ import tkinter.scrolledtext as scrollText
 
 commandKey = ''
 file_path = 'Untitled'
-settingsState = 0
 
 if platform == 'darwin':
     commandKey = 'Command'
@@ -45,7 +44,6 @@ def openFile(event=None):
         editArea.insert(INSERT, file.read())
         file.close()
         root.title(file_path)
-        settingsState = 0
     except:
         return
 
@@ -56,6 +54,11 @@ def saveFile(event=None):
 
     if file_path == 'Untitled':
         saveAsFile()
+    elif file_path == 'Settings':
+        file = open('src/editorSettings.py', 'w')
+        file.write(str(editArea.get(1.0, END)))
+        file.close()
+        root.title('Settings')
     else:
         file = open(str(file_path), 'w')
         file.write(str(editArea.get(1.0, END)))
@@ -67,7 +70,7 @@ def saveAsFile():
     global editArea
     global file_path
     
-    if settingsState == 1:
+    if file_path == 'Settings':
         pass
     else:
         file = filedialog.asksaveasfile(mode='w')
@@ -92,8 +95,8 @@ def openSettingsFile():
         editArea.delete('1.0', END)
         editArea.insert(INSERT, file.read())
         file.close()
+        file_path = 'Settings'
         root.title('Settings')
-        settingsState = 1
     except:
         return
 
