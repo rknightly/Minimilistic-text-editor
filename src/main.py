@@ -15,7 +15,7 @@ else:
 
 
 root = Tk()
-editArea = scrollText.ScrolledText()
+editArea = scrollText.ScrolledText(width=450, height=420)
 editArea.pack()
 
 
@@ -96,6 +96,6 @@ root.bind('<' + commandKey + '-Shift-S>', saveAsFile)
 
 
 
-root.minsize(450, 450)
-root.maxsize(450, 450)
+root.minsize(450, 420)
+root.maxsize(450, 420)
 root.mainloop()
