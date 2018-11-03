@@ -15,8 +15,8 @@ else:
 
 
 root = Tk()
-editArea = scrollText.ScrolledText(width=450, height=420)
-editArea.pack()
+editArea = scrollText.ScrolledText()
+editArea.pack(expand=True, fill='both')
 
 
 root.title(file_path)
@@ -69,7 +69,7 @@ def saveAsFile():
 
 
 def showAbout():
-    messagebox.showinfo('About', 'Author: John Paul Antonovich\n\nDescription: A simple text editor built with Python and the Tkinter library.')
+    messagebox.showinfo('About', 'Author: John Paul Antonovich\n\nLicense: MIT\n\nDescription: A simple text editor built with Python and the Tkinter library.')
 
 
 
@@ -96,6 +96,5 @@ root.bind('<' + commandKey + '-Shift-S>', saveAsFile)
 
 
 
-root.minsize(450, 420)
-root.maxsize(450, 420)
+root.minsize(450, 450)
 root.mainloop()
