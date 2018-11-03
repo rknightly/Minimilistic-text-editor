@@ -1,8 +1,12 @@
 from tkinter import *
 from tkinter import messagebox
-import tkinter.scrolledtext as scrollText
 from tkinter import filedialog
 from sys import platform
+from os import system
+
+import editorSettings
+import tkinter.scrolledtext as scrollText
+
 
 commandKey = ''
 file_path = 'Untitled'
@@ -15,11 +19,18 @@ else:
 
 
 root = Tk()
-editArea = scrollText.ScrolledText()
+editArea = scrollText.ScrolledText(
+    font=(
+        str(editorSettings.fontName),
+        int(editorSettings.fontSize)
+    )
+)
+
 editArea.pack(expand=True, fill='both')
 
 
 root.title(file_path)
+
 
 
 def openFile(event=None):
@@ -72,7 +83,6 @@ def showAbout():
     messagebox.showinfo('About', 'Author: John Paul Antonovich\n\nLicense: MIT\n\nDescription: A simple text editor built with Python and the Tkinter library.')
 
 
-
 menubar = Menu(root)
 
 filemenu = Menu(menubar, tearoff=0)
@@ -82,6 +92,7 @@ filemenu.add_command(label='Save As  ' + commandKey + '-Shift-S', command=saveAs
 filemenu.add_separator()
 filemenu.add_command(label='Exit', command=root.quit)
 menubar.add_cascade(label='File', menu=filemenu)
+
 
 helpmenu = Menu(menubar, tearoff=0)
 helpmenu.add_command(label='About', command=showAbout)
@@ -95,6 +106,6 @@ root.bind('<' + commandKey + '-o>', openFile)
 root.bind('<' + commandKey + '-Shift-S>', saveAsFile)
 
 
-
 root.minsize(450, 450)
+
 root.mainloop()
