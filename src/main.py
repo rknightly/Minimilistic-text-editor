@@ -10,7 +10,7 @@ import tkinter.scrolledtext as scrollText
 
 commandKey = ''
 file_path = 'Untitled'
-
+settingsState = 0
 
 if platform == 'darwin':
     commandKey = 'Command'
@@ -45,7 +45,7 @@ def openFile(event=None):
         editArea.insert(INSERT, file.read())
         file.close()
         root.title(file_path)
-
+        settingsState = 0
     except:
         return
 
@@ -66,17 +66,37 @@ def saveFile(event=None):
 def saveAsFile():
     global editArea
     global file_path
-
-    file = filedialog.asksaveasfile(mode='w')
-    if file is None:
-        return
     
-    writeText = str(editArea.get(1.0, END))
-    file.write(writeText)
-    file.close()
+    if settingsState == 1:
+        pass
+    else:
+        file = filedialog.asksaveasfile(mode='w')
+        if file is None:
+            return
+        
+        writeText = str(editArea.get(1.0, END))
+        file.write(writeText)
+        file.close()
 
-    file_path = file
-    root.title(file.name)
+        file_path = file
+        root.title(file.name)
+
+
+def openSettingsFile():
+    global editArea
+    global file_path
+    global settingsState
+
+    try:
+        file = open('src/editorSettings.py', 'r')
+        editArea.delete('1.0', END)
+        editArea.insert(INSERT, file.read())
+        file.close()
+        root.title('Settings')
+        settingsState = 1
+    except:
+        return
+
 
 
 def showAbout():
@@ -92,6 +112,11 @@ filemenu.add_command(label='Save As  ' + commandKey + '-Shift-S', command=saveAs
 filemenu.add_separator()
 filemenu.add_command(label='Exit', command=root.quit)
 menubar.add_cascade(label='File', menu=filemenu)
+
+
+settingsmenu = Menu(menubar, tearoff=0)
+settingsmenu.add_command(label='Open Prefrences', command=openSettingsFile)
+menubar.add_cascade(label='Settings', menu=settingsmenu)
 
 
 helpmenu = Menu(menubar, tearoff=0)
