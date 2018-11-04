@@ -4,6 +4,7 @@ from tkinter import filedialog
 from sys import platform
 from os import system
 
+import tkinter
 import editorSettings
 import tkinter.scrolledtext as scrollText
 
@@ -64,6 +65,11 @@ def saveFile(event=None):
         file.write(str(editArea.get(1.0, END)))
         file.close()
         root.title(file_path)
+
+
+def insertTab(event=None):
+    editArea.insert(tkinter.INSERT, " " * editorSettings.tabSize)
+    return 'break'
 
 
 def saveAsFile():
@@ -128,7 +134,7 @@ menubar.add_cascade(label='Help', menu=helpmenu)
 
 root.config(menu=menubar)
 
-
+editArea.bind('<Tab>', insertTab)
 root.bind('<' + commandKey + '-s>', saveFile)
 root.bind('<' + commandKey + '-o>', openFile)
 root.bind('<' + commandKey + '-Shift-S>', saveAsFile)
