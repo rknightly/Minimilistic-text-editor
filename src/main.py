@@ -22,15 +22,23 @@ else:
 
 
 root = Tk()
+root.background = editorSettings.backgroundColor
 
 # settings for the scrolledText widget
 editArea = scrollText.ScrolledText(
     font=(
-        str(editorSettings.fontName),
-        int(editorSettings.fontSize)
-    )
+        editorSettings.fontName,
+        editorSettings.fontSize
+    ),
+    background=editorSettings.backgroundColor,
+    foreground=editorSettings.textColor,
+    highlightcolor=editorSettings.backgroundColor,
+    selectborderwidth=0,
+    highlightthickness=0,
 )
 
+
+editArea.config(insertbackground=editorSettings.cursorColor)
 editArea.pack(expand=True, fill='both')
 
 
