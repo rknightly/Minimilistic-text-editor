@@ -4,7 +4,7 @@ there are any bugs in this file :)!'''
 
 # font settings
 fontName = 'default'
-fontSize = 12
+fontSize = 14
 
 # editor settings
 tabSize = 2
