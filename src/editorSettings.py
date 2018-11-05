@@ -8,6 +8,6 @@ fontSize = 12
 
 # editor settings
 tabSize = 2
-backgroundColor = 'black'
-textColor = 'white'
+backgroundColor = 'white'
+textColor = 'black'
 cursorColor = textColor
