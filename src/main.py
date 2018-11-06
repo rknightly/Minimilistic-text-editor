@@ -35,6 +35,7 @@ editArea = scrollText.ScrolledText(
     highlightcolor=editorSettings.backgroundColor,
     selectborderwidth=0,
     highlightthickness=0,
+    padx=5
 )
 
 
