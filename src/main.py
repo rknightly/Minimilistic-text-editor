@@ -44,6 +44,7 @@ editArea.pack(expand=True, fill='both')
 
 root.title(file_path)
 
+
 # open a file
 def openFile(event=None):
     global editArea
@@ -59,6 +60,7 @@ def openFile(event=None):
         root.title(file_path)
     except:
         return
+
 
 # save to the current file
 def saveFile(event=None):
@@ -81,10 +83,12 @@ def saveFile(event=None):
         file.close()
         root.title(file_path)
 
+
 # if tab is pressed enter the amount of space needed
 def insertTab(event=None):
     editArea.insert(tkinter.INSERT, " " * editorSettings.tabSize)
     return 'break'
+
 
 # create a new file
 def saveAsFile():
@@ -105,6 +109,7 @@ def saveAsFile():
         file_path = file
         root.title(file.name)
 
+
 # open the userSettings file
 def openSettingsFile():
     global editArea
@@ -120,6 +125,7 @@ def openSettingsFile():
         root.title('Settings')
     except:
         return
+
 
 # show a messagebox about the aplication
 def showAbout():
