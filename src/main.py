@@ -92,7 +92,7 @@ def insertTab(event=None):
 
 
 # create a new file
-def saveAsFile():
+def saveAsFile(event=None):
     global editArea
     global file_path
     
