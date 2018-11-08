@@ -4,10 +4,11 @@ there are any bugs in this file :)'''
 
 # font settings
 fontName = 'default'
-fontSize = 14
+fontSize = 12
 
 # editor settings
 tabSize = 2
 backgroundColor = 'white'
 textColor = 'black'
 cursorColor = textColor
+

@@ -30,6 +30,7 @@ editArea = scrollText.ScrolledText(
         editorSettings.fontName,
         editorSettings.fontSize
     ),
+    
     background=editorSettings.backgroundColor,
     foreground=editorSettings.textColor,
     highlightcolor=editorSettings.backgroundColor,
