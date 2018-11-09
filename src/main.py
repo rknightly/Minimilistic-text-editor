@@ -36,12 +36,12 @@ editArea = scrollText.ScrolledText(
     highlightcolor=editorSettings.backgroundColor,
     selectborderwidth=0,
     highlightthickness=0,
-    padx=5
+    padx=3
 )
 
 
 editArea.config(insertbackground=editorSettings.cursorColor)
-editArea.pack(expand=True, fill='both')
+editArea.pack(expand=True, fill='both') # make the editor area cover most of the screen
 
 
 root.title(file_path)
@@ -168,4 +168,15 @@ root.bind('<' + commandKey + '-Shift-S>', saveAsFile)
 
 
 root.minsize(450, 450)
-root.mainloop()
+
+
+def main():
+    try:
+        root.mainloop()
+    except:
+        pass # this code is only here if the user keyboardInturrupts the program 
+
+
+if __name__ == '__main__':
+    main()
+        
