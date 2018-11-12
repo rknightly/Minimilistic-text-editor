@@ -1,7 +1,7 @@
 {
     "fontName": "default",
     "fontSize": 12,
-    "tabSize": 4,
+    "tabSize": 2,
     "backgroundColor": "white",
     "textColor": "black",
     "cursorColor": "black"

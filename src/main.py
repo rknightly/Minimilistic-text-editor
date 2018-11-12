@@ -5,9 +5,8 @@ from sys import platform
 from os import system
 
 import tkinter
-import editorSettings
 import tkinter.scrolledtext as scrollText
-
+import json
 
 commandKey = ''
 file_path = 'Untitled'
@@ -21,26 +20,28 @@ else:
     commandKey = 'Control'
 
 
+settings = json.load(open('src/editorSettings.json', 'r'))
+
 root = Tk()
-root.background = editorSettings.backgroundColor
+root.background = settings['backgroundColor']
 
 # settings for the scrolledText widget
 editArea = scrollText.ScrolledText(
     font=(
-        editorSettings.fontName,
-        editorSettings.fontSize
+        settings['fontName'],
+        settings['fontSize']
     ),
     
-    background=editorSettings.backgroundColor,
-    foreground=editorSettings.textColor,
-    highlightcolor=editorSettings.backgroundColor,
+    background=settings['backgroundColor'],
+    foreground=settings['textColor'],
+    highlightcolor=settings['backgroundColor'],
     selectborderwidth=0,
     highlightthickness=0,
     padx=3
 )
 
 
-editArea.config(insertbackground=editorSettings.cursorColor)
+editArea.config(insertbackground=settings['cursorColor'])
 editArea.pack(expand=True, fill='both') # make the editor area cover most of the screen
 
 
@@ -51,7 +52,6 @@ root.title(file_path)
 def openFile(event=None):
     global editArea
     global file_path
-
     file_path = filedialog.askopenfilename()
 
     try:
@@ -61,7 +61,8 @@ def openFile(event=None):
         file.close()
         root.title(file_path)
     except:
-        return
+        return 'break'
+    return 'break'
 
 
 # save to the current file
@@ -88,7 +89,7 @@ def saveFile(event=None):
 
 # if tab is pressed enter the amount of space needed
 def insertTab(event=None):
-    editArea.insert(tkinter.INSERT, " " * editorSettings.tabSize)
+    editArea.insert(tkinter.INSERT, " " * settings['tabSize'])
     return 'break'
 
 
@@ -119,7 +120,7 @@ def openSettingsFile():
     global settingsState
 
     try:
-        file = open('src/editorSettings.py', 'r')
+        file = open('src/editorSettings.json', 'r')
         editArea.delete('1.0', END)
         editArea.insert(INSERT, file.read())
         file.close()
@@ -161,10 +162,12 @@ root.config(menu=menubar)
 # used for customized tabs
 editArea.bind('<Tab>', insertTab)
 
+
+
 # add keyboard shorcuts
-root.bind('<' + commandKey + '-s>', saveFile)
-root.bind('<' + commandKey + '-o>', openFile)
-root.bind('<' + commandKey + '-Shift-S>', saveAsFile)
+editArea.bind('<' + commandKey + '-s>', saveFile)
+editArea.bind('<' + commandKey + '-o>', openFile)
+editArea.bind('<' + commandKey + '-Shift-S>', saveAsFile)
 
 
 root.minsize(450, 450)
@@ -177,6 +180,7 @@ def main():
         pass # this code is only here if the user keyboardInturrupts the program 
 
 
+
 if __name__ == '__main__':
     main()
-        
+
