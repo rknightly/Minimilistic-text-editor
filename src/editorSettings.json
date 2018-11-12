@@ -4,5 +4,6 @@
     "tabSize": 2,
     "backgroundColor": "white",
     "textColor": "black",
-    "cursorColor": "black"
+    "cursorColor": "black",
+    "cursorStyle": "xterm"
 }

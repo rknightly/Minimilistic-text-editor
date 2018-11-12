@@ -32,6 +32,7 @@ editArea = scrollText.ScrolledText(
         settings['fontSize']
     ),
     
+    cursor=settings['cursorStyle'],
     background=settings['backgroundColor'],
     foreground=settings['textColor'],
     highlightcolor=settings['backgroundColor'],
