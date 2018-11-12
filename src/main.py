@@ -173,6 +173,8 @@ editArea.bind('<' + commandKey + '-Shift-S>', saveAsFile)
 
 root.minsize(450, 450)
 
+root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='src/derpy_pencil.png'))
+
 
 def main():
     try:
