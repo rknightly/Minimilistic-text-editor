@@ -5,5 +5,6 @@
     "backgroundColor": "white",
     "textColor": "black",
     "cursorColor": "black",
-    "cursorStyle": "xterm"
+    "cursorStyle": "xterm",
+    "runCommand": "Echo: error no run command for {}"
 }
