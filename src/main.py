@@ -6,7 +6,7 @@ from os import system
 
 import tkinter
 import tkinter.scrolledtext as scrollText
-import json
+from json import load
 
 commandKey = ''
 file_path = 'Untitled'
@@ -20,7 +20,7 @@ else:
     commandKey = 'Control'
 
 
-settings = json.load(open('src/editorSettings.json', 'r'))
+settings = load(open('src/editorSettings.json', 'r'))
 
 root = Tk()
 root.background = settings['backgroundColor']
