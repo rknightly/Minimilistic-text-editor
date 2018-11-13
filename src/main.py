@@ -86,6 +86,7 @@ def saveFile(event=None):
         file.write(str(editArea.get(1.0, END)))
         file.close()
         root.title(file_path)
+    return 'break'
 
 
 # if tab is pressed enter the amount of space needed
@@ -112,6 +113,7 @@ def saveAsFile(event=None):
 
         file_path = file
         root.title(file.name)
+    return 'break'
 
 
 # open the userSettings file
@@ -183,7 +185,5 @@ def main():
         pass # this code is only here if the user keyboardInturrupts the program 
 
 
-
 if __name__ == '__main__':
     main()
-
