@@ -97,7 +97,10 @@ def insertTab(event=None):
 
 # run the run command
 def run(event=None):
-    system(f'''{settings['runCommand'].format(file_path)}''')
+    try:
+        system(f'''{settings['runCommand'].format(file_path)}''')
+    except:
+        ststem(f'''{settings['runCommand']}''')
     return 'break'
 
 
@@ -141,7 +144,8 @@ def openSettingsFile():
 
 # show a messagebox about the aplication
 def showAbout():
-    messagebox.showinfo('About', 'Author: John Paul Antonovich\n\nLicense: MIT\n\nDescription: A simple text editor built with Python and the Tkinter library.')
+    messagebox.showinfo('About', 'Author: John Paul Antonovich\n\nLicense: MIT\n\nDescription: A simple text editor built with Python and the Tkinter library. If you like to know more read the README of this program!\n\n Repository: http://github.com/hatOnABox/Simple-Text-Editor')
+
 
 
 menubar = Menu(root)
