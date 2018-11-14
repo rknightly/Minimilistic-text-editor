@@ -100,7 +100,7 @@ def run(event=None):
     try:
         system(f'''{settings['runCommand'].format(file_path)}''')
     except:
-        ststem(f'''{settings['runCommand']}''')
+        system(f'''{settings['runCommand']}''')
     return 'break'
 
 
