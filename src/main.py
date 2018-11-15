@@ -148,7 +148,7 @@ def showAbout():
 
 
 # if the user tries to quit without saving ask them if they would like to save
-def askQuit():
+def askQuit(event=None):
     if file_path == 'Settings':
         data = open('src/editorSettings.json').read()
         if data != str(editArea.get(1.0, "end-1c")):
@@ -181,10 +181,9 @@ filemenu = Menu(menubar, tearoff=0)
 filemenu.add_command(label='Open  ' + commandKey + '-o', command=openFile)
 filemenu.add_command(label='Save  ' + commandKey + '-s', command=saveFile)
 filemenu.add_command(label='Save As  ' + commandKey + '-Shift-S', command=saveAsFile)
+filemenu.add_command(label='Run  ' + commandKey + '-f', command=run)
 filemenu.add_separator()
-filemenu.add_command(label='Run ' + commandKey + '-f', command=run)
-filemenu.add_separator()
-filemenu.add_command(label='Exit', command=root.quit)
+filemenu.add_command(label='Exit  ' + commandKey + '-q', command=askQuit)
 menubar.add_cascade(label='File', menu=filemenu)
 
 # create the 'settings menu'
@@ -200,9 +199,12 @@ menubar.add_cascade(label='Help', menu=helpmenu)
 # add all of the menus to the window
 root.config(menu=menubar)
 
+
+# user can use Command-q or Control-q
+root.bind('<' + commandKey + '-q>', askQuit)
+
 # used for customized tabs
 editArea.bind('<Tab>', insertTab)
-
 
 
 # add keyboard shorcuts
