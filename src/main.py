@@ -133,7 +133,7 @@ def openSettingsFile():
 
     try:
         file = open('src/editorSettings.json', 'r')
-        editArea.delete('1.0', END)
+        editArea.delete(1.0, END)
         editArea.insert(INSERT, file.read())
         file.close()
         file_path = 'Settings'
@@ -146,6 +146,32 @@ def openSettingsFile():
 def showAbout():
     messagebox.showinfo('About', 'Author: John Paul Antonovich\n\nLicense: MIT\n\nDescription: A simple text editor built with Python and the Tkinter library. If you like to know more read the README of this program!\n\n Repository: http://github.com/hatOnABox/Simple-Text-Editor')
 
+
+# if the user tries to quit without saving ask them if they would like to save
+def askQuit():
+    if file_path == 'Settings':
+        data = open('src/editorSettings.json').read()
+        if data != str(editArea.get(1.0, END)):
+            if messagebox.askofcancel('Hold on!', 'Are you sure that you would like to quit? You have changes that you haven\'t saved!') == True:
+                root.quit()
+            else:
+                pass
+        else:
+            root.quit()
+    elif file_path != 'Untitled':
+        data = open(file_path).read()
+        if data != str(editArea.get(1.0, END)):
+            if messagebox.askyesno('Hold on!', 'Are you sure that you would like to quit? You have changes that you haven\'t saved!') == True:
+                root.quit()
+            else:
+                pass
+        else:
+            root.quit()
+    else:
+        if messagebox.askyesno('Hold on!', 'Are you sure you would not like to save \'Untitled\'?') == True:
+            root.quit()
+        else:
+            saveFile()
 
 
 menubar = Menu(root)
@@ -189,13 +215,13 @@ editArea.bind('<' + commandKey + '-Shift-S>', saveAsFile)
 root.minsize(450, 450)
 
 root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='src/derpy_pencil.png'))
-
+root.protocol("WM_DELETE_WINDOW",  askQuit)
 
 def main():
     try:
         root.mainloop()
     except:
-        pass # this code is only here if the user keyboardInturrupts the program 
+        askQuit() 
 
 
 if __name__ == '__main__':
