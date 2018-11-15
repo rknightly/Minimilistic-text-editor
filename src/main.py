@@ -151,8 +151,8 @@ def showAbout():
 def askQuit():
     if file_path == 'Settings':
         data = open('src/editorSettings.json').read()
-        if data != str(editArea.get(1.0, END)):
-            if messagebox.askofcancel('Hold on!', 'Are you sure that you would like to quit? You have changes that you haven\'t saved!') == True:
+        if data != str(editArea.get(1.0, "end-1c")):
+            if messagebox.askyesno('Hold on!', 'Are you sure that you would like to quit? You have changes that you haven\'t saved!') == True:
                 root.quit()
             else:
                 pass
@@ -160,7 +160,7 @@ def askQuit():
             root.quit()
     elif file_path != 'Untitled':
         data = open(file_path).read()
-        if data != str(editArea.get(1.0, END)):
+        if data != str(editArea.get(1.0, "end-1c")):
             if messagebox.askyesno('Hold on!', 'Are you sure that you would like to quit? You have changes that you haven\'t saved!') == True:
                 root.quit()
             else:
