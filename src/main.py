@@ -8,6 +8,7 @@ import tkinter
 import tkinter.scrolledtext as scrollText
 from json import load
 
+
 commandKey = ''
 file_path = 'Untitled'
 
@@ -21,6 +22,7 @@ else:
 
 
 settings = load(open('src/editorSettings.json', 'r'))
+
 
 root = Tk()
 root.background = settings['backgroundColor']
@@ -57,7 +59,7 @@ def openFile(event=None):
 
     try:
         file = open(file_path, 'r')
-        editArea.delete('1.0', END)
+        editArea.delete('1.0', "end-1c")
         editArea.insert(INSERT, file.read())
         file.close()
         root.title(file_path)
@@ -76,14 +78,14 @@ def saveFile(event=None):
         saveAsFile()
     # if the user is editing the settings file save to 'editorSettings.py'
     elif file_path == 'Settings':
-        file = open('src/editorSettings.py', 'w')
-        file.write(str(editArea.get(1.0, END)))
+        file = open('src/editorSettings.json', 'w')
+        file.write(str(editArea.get(1.0, "end-1c")))
         file.close()
         root.title('Settings')
     # otherwise save the file
     else:
         file = open(str(file_path), 'w')
-        file.write(str(editArea.get(1.0, END)))
+        file.write(str(editArea.get(1.0, "end-1c")))
         file.close()
         root.title(file_path)
     return 'break'
@@ -116,7 +118,7 @@ def saveAsFile(event=None):
         if file is None:
             return
         
-        writeText = str(editArea.get(1.0, END))
+        writeText = str(editArea.get(1.0, "end-1c"))
         file.write(writeText)
         file.close()
 
@@ -133,7 +135,7 @@ def openSettingsFile():
 
     try:
         file = open('src/editorSettings.json', 'r')
-        editArea.delete(1.0, END)
+        editArea.delete(1.0, "end-1c")
         editArea.insert(INSERT, file.read())
         file.close()
         file_path = 'Settings'
@@ -149,29 +151,34 @@ def showAbout():
 
 # if the user tries to quit without saving ask them if they would like to save
 def askQuit(event=None):
-    if file_path == 'Settings':
-        data = open('src/editorSettings.json').read()
-        if data != str(editArea.get(1.0, "end-1c")):
-            if messagebox.askyesno('Hold on!', 'Are you sure that you would like to quit? You have changes that you haven\'t saved!') == True:
-                root.quit()
-            else:
-                pass
-        else:
-            root.quit()
-    elif file_path != 'Untitled':
-        data = open(file_path).read()
-        if data != str(editArea.get(1.0, "end-1c")):
-            if messagebox.askyesno('Hold on!', 'Are you sure that you would like to quit? You have changes that you haven\'t saved!') == True:
-                root.quit()
-            else:
-                pass
-        else:
-            root.quit()
+    if settings['ask before quit'] == 'no':
+        root.quit()
     else:
-        if messagebox.askyesno('Hold on!', 'Are you sure you would not like to save \'Untitled\'?') == True:
-            root.quit()
+        if file_path == 'Settings':
+            data = open('src/editorSettings.json').read()
+            
+            if data != str(editArea.get(1.0, "end-1c")):
+                if messagebox.askyesno('Hold on!', 'Are you sure that you would like to quit? You have changes that you haven\'t saved!') == True:
+                    root.quit()
+                else:
+                    pass
+            else:
+                root.quit()
+        elif file_path != 'Untitled':
+            data = open(file_path).read()
+            if data != str(editArea.get(1.0, "end-1c")):
+                if messagebox.askyesno('Hold on!', 'Are you sure that you would like to quit? You have changes that you haven\'t saved!') == True:
+                    root.quit()
+                else:
+                    pass
+            else:
+                root.quit()
         else:
-            saveFile()
+            if messagebox.askyesno('Hold on!', 'Are you sure you would not like to save \'Untitled\'?') == True:
+                root.quit()
+            else:
+                saveFile()      
+        root.quit()
 
 
 menubar = Menu(root)
