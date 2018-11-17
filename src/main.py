@@ -21,11 +21,32 @@ else:
     commandKey = 'Control'
 
 
-settings = load(open('src/editorSettings.json', 'r'))
-
-
 root = Tk()
+root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='src/derpy_pencil.png'))
+root.minsize(450, 450)
+
+
+# try to load the json settings
+try:
+    settings = load(open('src/editorSettings.json', 'r'))
+# if there is an error
+except Exception as err:
+    settings = {
+        "fontName": "default", 
+        "fontSize": 12,
+        "tabSize": 2,
+        "backgroundColor": "white",
+        "textColor": "black",
+        "cursorColor": "black",
+        "cursorStyle": "xterm",
+        "runCommand": "Echo: error no run command for {}",
+        "ask before quit": "yes"
+    }
+    root.lower()
+    messagebox.showinfo('Oh No!', 'There was an error in the editorSettings.json file! ' + str(err))
+
 root.background = settings['backgroundColor']
+
 
 # settings for the scrolledText widget
 editArea = scrollText.ScrolledText(
@@ -178,7 +199,11 @@ def askQuit(event=None):
                 root.quit()
             else:
                 saveFile()      
-        root.quit()
+
+
+# this is used becuase if the user uses control-q and the even is root.quit an error will be raised
+def quit(event=None):
+    root.quit()
 
 
 menubar = Menu(root)
@@ -208,7 +233,7 @@ root.config(menu=menubar)
 
 
 # user can use Command-q or Control-q
-root.bind('<' + commandKey + '-q>', askQuit)
+root.bind('<' + commandKey + '-q>', quit)
 
 # used for customized tabs
 editArea.bind('<Tab>', insertTab)
@@ -221,16 +246,14 @@ editArea.bind('<' + commandKey + '-o>', openFile)
 editArea.bind('<' + commandKey + '-Shift-S>', saveAsFile)
 
 
-root.minsize(450, 450)
-
-root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='src/derpy_pencil.png'))
 root.protocol("WM_DELETE_WINDOW",  askQuit)
+
 
 def main():
     try:
         root.mainloop()
     except:
-        askQuit() 
+        askQuit()
 
 
 if __name__ == '__main__':
