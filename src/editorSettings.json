@@ -6,6 +6,5 @@
     "textColor": "black",
     "cursorColor": "black",
     "cursorStyle": "xterm",
-    "runCommand": "Echo {}",
     "ask before quit": "yes"
 }

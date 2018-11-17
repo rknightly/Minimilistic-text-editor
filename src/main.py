@@ -117,15 +117,6 @@ def insertTab(event=None):
     return 'break'
 
 
-# run the run command
-def run(event=None):
-    try:
-        Popen(f'''{settings['runCommand'].format(file_path)}''')
-    except:
-        Popen(f'''{settings['runCommand']}''')
-    return 'break'
-
-
 # create a new file
 def saveAsFile(event=None):
     global editArea
@@ -212,7 +203,6 @@ filemenu = Menu(menubar, tearoff=0)
 filemenu.add_command(label='Open  ' + commandKey + '-o', command=openFile)
 filemenu.add_command(label='Save  ' + commandKey + '-s', command=saveFile)
 filemenu.add_command(label='Save As  ' + commandKey + '-Shift-S', command=saveAsFile)
-filemenu.add_command(label='Run  ' + commandKey + '-f', command=run)
 filemenu.add_separator()
 filemenu.add_command(label='Exit  ' + commandKey + '-q', command=askQuit)
 menubar.add_cascade(label='File', menu=filemenu)
@@ -239,7 +229,6 @@ editArea.bind('<Tab>', insertTab)
 
 
 # add keyboard shorcuts
-editArea.bind('<' + commandKey + '-f>', run)
 editArea.bind('<' + commandKey + '-s>', saveFile)
 editArea.bind('<' + commandKey + '-o>', openFile)
 editArea.bind('<' + commandKey + '-Shift-S>', saveAsFile)

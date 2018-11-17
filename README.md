@@ -44,6 +44,4 @@ Detailed description of each prefrence
 
 "cursorStyle" - the style of the cursor. NOTE: do not change unless you know what you are doing!
 
-"runCommand" - the command that will run when you run your code. {} will translate to the current file if you enter them into your command.
-
 "ask before quit" - ask if the user would like to save if they have unsaved changes. NOTE: if the option is not "yes" or "no" than the program wiil assume it is "yes!"
