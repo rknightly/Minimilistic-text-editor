@@ -38,7 +38,6 @@ except Exception as err:
         "textColor": "black",
         "cursorColor": "black",
         "cursorStyle": "xterm",
-        "runCommand": "Echo: error no run command for {}",
         "ask before quit": "yes"
     }
     root.lower()
