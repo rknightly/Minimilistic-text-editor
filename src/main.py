@@ -2,8 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import filedialog
 from sys import platform
-from os import popen
-
+from subprocess import Popen
 import tkinter
 import tkinter.scrolledtext as scrollText
 from json import load
@@ -121,9 +120,9 @@ def insertTab(event=None):
 # run the run command
 def run(event=None):
     try:
-        popen(f'''{settings['runCommand'].format(file_path)}''')
+        Popen(f'''{settings['runCommand'].format(file_path)}''')
     except:
-        popen(f'''{settings['runCommand']}''')
+        Popen(f'''{settings['runCommand']}''')
     return 'break'
 
 
