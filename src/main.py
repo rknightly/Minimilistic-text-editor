@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import filedialog
 from sys import platform
-from subprocess import Popen
+
 import tkinter
 import tkinter.scrolledtext as scrollText
 from json import load
