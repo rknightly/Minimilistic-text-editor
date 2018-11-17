@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from tkinter import *
 from tkinter import messagebox
 from tkinter import filedialog
@@ -21,13 +23,13 @@ else:
 
 
 root = Tk()
-root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='src/derpy_pencil.png'))
+root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='derpy_pencil.png'))
 root.minsize(450, 450)
 
 
 # try to load the json settings
 try:
-    settings = load(open('src/editorSettings.json', 'r'))
+    settings = load(open('editorSettings.json', 'r'))
 # if there is an error
 except Exception as err:
     settings = {
@@ -97,7 +99,7 @@ def saveFile(event=None):
         saveAsFile()
     # if the user is editing the settings file save to 'editorSettings.py'
     elif file_path == 'Settings':
-        file = open('src/editorSettings.json', 'w')
+        file = open('editorSettings.json', 'w')
         file.write(str(editArea.get(1.0, "end-1c")))
         file.close()
         root.title('Settings')
@@ -144,7 +146,7 @@ def openSettingsFile():
     global settingsState
 
     try:
-        file = open('src/editorSettings.json', 'r')
+        file = open('editorSettings.json', 'r')
         editArea.delete(1.0, "end-1c")
         editArea.insert(INSERT, file.read())
         file.close()
@@ -165,7 +167,7 @@ def askQuit(event=None):
         root.quit()
     else:
         if file_path == 'Settings':
-            data = open('src/editorSettings.json').read()
+            data = open('editorSettings.json').read()
             
             if data != str(editArea.get(1.0, "end-1c")):
                 if messagebox.askyesno('Hold on!', 'Are you sure that you would like to quit? You have changes that you haven\'t saved!') == True:
