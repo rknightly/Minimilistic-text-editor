@@ -6,6 +6,6 @@
     "textColor": "black",
     "cursorColor": "black",
     "cursorStyle": "xterm",
-    "runCommand": "Echo: error no run command for {}",
+    "runCommand": "Echo: {}",
     "ask before quit": "yes"
 }

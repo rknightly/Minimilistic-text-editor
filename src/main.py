@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import filedialog
 from sys import platform
-from os import system
+from os import popen
 
 import tkinter
 import tkinter.scrolledtext as scrollText
@@ -121,9 +121,9 @@ def insertTab(event=None):
 # run the run command
 def run(event=None):
     try:
-        system(f'''{settings['runCommand'].format(file_path)}''')
+        popen(f'''{settings['runCommand'].format(file_path)}''')
     except:
-        system(f'''{settings['runCommand']}''')
+        popen(f'''{settings['runCommand']}''')
     return 'break'
 
 
