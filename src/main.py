@@ -80,12 +80,23 @@ def openFile(event=None):
 
     try:
         file = open(file_path, 'r')
-        editArea.delete('1.0', "end-1c")
+        editArea.delete(1.0, "end-1c")
         editArea.insert(INSERT, file.read())
         file.close()
         root.title(file_path)
     except:
         return 'break'
+    return 'break'
+
+
+# create a new file
+def newFile(event=None):
+    global editArea
+    global file_path
+
+    file_path = 'Untitled'
+    editArea.delete(1.0, "end-1c")
+    root.title(file_path)
     return 'break'
 
 
@@ -189,7 +200,10 @@ def askQuit(event=None):
             if messagebox.askyesno('Hold on!', 'Are you sure you would not like to save \'Untitled\'?') == True:
                 root.quit()
             else:
-                saveFile()      
+                try:
+                    saveFile()
+                except:
+                    pass      
 
 
 # this is used becuase if the user uses control-q and the even is root.quit an error will be raised
@@ -201,6 +215,7 @@ menubar = Menu(root)
 
 # create the 'file' menu
 filemenu = Menu(menubar, tearoff=0)
+filemenu.add_command(label='New  ' + commandKey + '-n', command=newFile)
 filemenu.add_command(label='Open  ' + commandKey + '-o', command=openFile)
 filemenu.add_command(label='Save  ' + commandKey + '-s', command=saveFile)
 filemenu.add_command(label='Save As  ' + commandKey + '-Shift-S', command=saveAsFile)
@@ -230,6 +245,7 @@ editArea.bind('<Tab>', insertTab)
 
 
 # add keyboard shorcuts
+editArea.bind('<' + commandKey + '-n>', newFile)
 editArea.bind('<' + commandKey + '-s>', saveFile)
 editArea.bind('<' + commandKey + '-o>', openFile)
 editArea.bind('<' + commandKey + '-Shift-S>', saveAsFile)
