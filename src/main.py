@@ -3,13 +3,13 @@
 from tkinter import *
 from tkinter import messagebox
 from tkinter import filedialog
-from sys import platform
+from sys import platform, exit
 
 import tkinter
 import tkinter.scrolledtext as scrollText
 from json import load
 
-
+extra = None
 commandKey = ''
 file_path = 'Untitled'
 
@@ -50,6 +50,7 @@ root.background = settings['backgroundColor']
 
 # settings for the scrolledText widget
 editArea = scrollText.ScrolledText(
+    root,
     font=(
         settings['fontName'],
         settings['fontSize']
@@ -76,8 +77,10 @@ root.title(file_path)
 def openFile(event=None):
     global editArea
     global file_path
+    
+    editArea.config(state=NORMAL)
     file_path = filedialog.askopenfilename()
-
+    
     try:
         file = open(file_path, 'r')
         editArea.delete(1.0, "end-1c")
@@ -94,6 +97,7 @@ def newFile(event=None):
     global editArea
     global file_path
 
+    editArea.config(state=NORMAL)
     file_path = 'Untitled'
     editArea.delete(1.0, "end-1c")
     root.title(file_path)
@@ -107,7 +111,10 @@ def saveFile(event=None):
 
     # if the user is not editing a file then create a new one
     if file_path == 'Untitled':
-        saveAsFile()
+        if saveAsFile() == False:
+            return False
+    if file_path == 'Manual':
+        return True
     # if the user is editing the settings file save to 'editorSettings.py'
     elif file_path == 'Settings':
         file = open('editorSettings.json', 'w')
@@ -136,10 +143,12 @@ def saveAsFile(event=None):
     
     if file_path == 'Settings':
         pass
+    if file_path == 'Manual':
+        pass
     else:
         file = filedialog.asksaveasfile(mode='w')
         if file is None:
-            return
+            return False
         
         writeText = str(editArea.get(1.0, "end-1c"))
         file.write(writeText)
@@ -157,6 +166,7 @@ def openSettingsFile():
     global settingsState
 
     try:
+        editArea.config(state=NORMAL)
         file = open('editorSettings.json', 'r')
         editArea.delete(1.0, "end-1c")
         editArea.insert(INSERT, file.read())
@@ -165,6 +175,21 @@ def openSettingsFile():
         root.title('Settings')
     except:
         return
+
+
+# opens a window with instuctions on how to use the text editor
+def showManual():
+    global editArea
+    global file_path
+
+    manualFile = open('manual.txt', 'r')
+    editArea.delete(1.0, "end-1c")
+    editArea.insert(INSERT, manualFile.read())
+    manualFile.close()
+    editArea.config(state=DISABLED)
+    root.title('Manual')
+    file_path = 'Manual'
+
 
 
 # show a messagebox about the aplication
@@ -182,33 +207,37 @@ def askQuit(event=None):
             
             if data != str(editArea.get(1.0, "end-1c")):
                 if messagebox.askyesno('Hold on!', 'Are you sure that you would like to quit? You have changes that you haven\'t saved!') == True:
-                    root.quit()
+                    return 0
                 else:
-                    pass
+                    return 1
             else:
-                root.quit()
+                return 0   
+        elif file_path == 'Manual':
+            return 0             
         elif file_path != 'Untitled':
             data = open(file_path).read()
             if data != str(editArea.get(1.0, "end-1c")):
                 if messagebox.askyesno('Hold on!', 'Are you sure that you would like to quit? You have changes that you haven\'t saved!') == True:
-                    root.quit()
+                    return 0
                 else:
-                    pass
+                    return 1
             else:
-                root.quit()
+                return 0
         else:
             if messagebox.askyesno('Hold on!', 'Are you sure you would not like to save \'Untitled\'?') == True:
-                root.quit()
+                return 0
             else:
-                try:
-                    saveFile()
-                except:
-                    pass      
+                if saveFile() == False:
+                    return 1
+                else:
+                    return 0
 
 
-# this is used becuase if the user uses control-q and the even is root.quit an error will be raised
+# used to break the program
 def quit(event=None):
-    root.quit()
+    if askQuit() == 0:
+        root.quit()
+        exit(0)
 
 
 menubar = Menu(root)
@@ -220,7 +249,7 @@ filemenu.add_command(label='Open  ' + commandKey + '-o', command=openFile)
 filemenu.add_command(label='Save  ' + commandKey + '-s', command=saveFile)
 filemenu.add_command(label='Save As  ' + commandKey + '-Shift-S', command=saveAsFile)
 filemenu.add_separator()
-filemenu.add_command(label='Exit  ' + commandKey + '-q', command=askQuit)
+filemenu.add_command(label='Exit  ' + commandKey + '-q', command=quit)
 menubar.add_cascade(label='File', menu=filemenu)
 
 # create the 'settings menu'
@@ -231,17 +260,19 @@ menubar.add_cascade(label='Settings', menu=settingsmenu)
 # create the 'help menu'
 helpmenu = Menu(menubar, tearoff=0)
 helpmenu.add_command(label='About', command=showAbout)
+helpmenu.add_command(label='Manual', command=showManual)
 menubar.add_cascade(label='Help', menu=helpmenu)
 
 # add all of the menus to the window
 root.config(menu=menubar)
 
-
-# user can use Command-q or Control-q
-root.bind('<' + commandKey + '-q>', quit)
-
 # used for customized tabs
 editArea.bind('<Tab>', insertTab)
+
+
+# mac os already has Control-q built in
+if platform != 'darwin':
+    root.bind('<' + commandKey + '-q>', quit)
 
 
 # add keyboard shorcuts
@@ -251,14 +282,15 @@ editArea.bind('<' + commandKey + '-o>', openFile)
 editArea.bind('<' + commandKey + '-Shift-S>', saveAsFile)
 
 
-root.protocol("WM_DELETE_WINDOW",  askQuit)
+root.protocol("WM_DELETE_WINDOW", quit)
 
 
 def main():
-    try:
-        root.mainloop()
-    except:
-        askQuit()
+    while True:
+        try:
+            root.mainloop()
+        except:
+            quit()
 
 
 if __name__ == '__main__':

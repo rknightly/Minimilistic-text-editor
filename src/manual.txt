@@ -1,0 +1,43 @@
+Note: To exit this screen go to the file menu and open a file or make a new one. Keybindings will not work on this screen!
+
+Saving Files
+------------------------
+
+To save a file press Control-s or Command-s. You can also go to file -> save file.
+
+
+Save as files
+-------------------------
+
+To save as a file press Control-Shift-S or Command-Shift-S. You can also go to file -> save file.
+
+Open Files
+-------------------------
+
+To open a file then press Control-o or Command-o. You can also go to file -> open file.
+
+New Files
+------------------------
+
+To create a new 'Untitled' screen press Control-N or Command-n. You can als go to file -> new file.
+
+opening Prefrences
+------------------------
+
+To open you editor settings go to settings -> prefrences to see a json file of many prefrences. Here is a list of prefrences and what they change:
+
+"fontName" - the name of the font you would like to see in the editor
+
+"fontSize" - the size of the text in the editor
+
+"tabSize" - the size of your tabs in the editor
+
+"backgroundColor" - the color of the editor's background
+
+"textColor" - the color of the text
+
+"cursorColor" - the color of the cursor in the editor
+
+"cursorStyle" - the style of the cursor. NOTE: do not change unless you know what you are doing!
+
+"ask before quit" - ask if the user would like to save if they have unsaved changes. NOTE: if the option is not "yes" or "no" than the program wiil assume it is "yes!"
