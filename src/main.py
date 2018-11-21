@@ -62,7 +62,8 @@ editArea = scrollText.ScrolledText(
     highlightcolor=settings['backgroundColor'],
     selectborderwidth=0,
     highlightthickness=0,
-    padx=3
+    padx=3,
+    undo=True,
 )
 
 
@@ -240,6 +241,41 @@ def quit(event=None):
         exit(0)
 
 
+# redo command
+def editRedo(event=None):
+    try:
+        editArea.edit_redo()
+    except:
+        pass
+
+
+# undo command
+def editUndo(event=None):
+    try:
+        editArea.edit_undo()
+    except:
+        pass
+
+
+# copy command
+def editCopy(event=None):
+    root.clipboard_clear()
+    root.clipboard_append(editArea.get('sel.first', 'sel.last'))
+    
+
+# cut command
+def editCut(event=None):
+    root.clipboard_clear()
+    root.clipboard_append(editArea.get('sel.first', 'sel.last'))
+    editArea.delete('sel.first', 'sel.last')
+    
+
+# paste command
+def editPaste(event=None):
+    editArea.insert(editArea.index(INSERT), root.clipboard_get())
+
+
+
 menubar = Menu(root)
 
 # create the 'file' menu
@@ -251,6 +287,16 @@ filemenu.add_command(label='Save As  ' + commandKey + '-Shift-S', command=saveAs
 filemenu.add_separator()
 filemenu.add_command(label='Exit  ' + commandKey + '-q', command=quit)
 menubar.add_cascade(label='File', menu=filemenu)
+
+
+editmenu = Menu(menubar, tearoff=0)
+editmenu.add_command(label='Undo', command=editUndo)
+editmenu.add_command(label='Redo', command=editRedo)
+editmenu.add_separator()
+editmenu.add_command(label='Copy', command=editCopy)
+editmenu.add_command(label='Cut', command=editCut)
+editmenu.add_command(label='Paste', command=editPaste)
+menubar.add_cascade(label='Edit', menu=editmenu)
 
 # create the 'settings menu'
 settingsmenu = Menu(menubar, tearoff=0)
@@ -269,13 +315,15 @@ root.config(menu=menubar)
 # used for customized tabs
 editArea.bind('<Tab>', insertTab)
 
-
-# mac os already has Control-q built in
+# mac has a built in Command-q
 if platform != 'darwin':
     root.bind('<' + commandKey + '-q>', quit)
+else:
+    root.createcommand('exit', quit)
 
 
 # add keyboard shorcuts
+editArea.bind('<Shift-' + commandKey + '-z>', editRedo)
 editArea.bind('<' + commandKey + '-n>', newFile)
 editArea.bind('<' + commandKey + '-s>', saveFile)
 editArea.bind('<' + commandKey + '-o>', openFile)
@@ -287,10 +335,7 @@ root.protocol("WM_DELETE_WINDOW", quit)
 
 def main():
     while True:
-        try:
-            root.mainloop()
-        except:
-            quit()
+        root.mainloop()
 
 
 if __name__ == '__main__':
