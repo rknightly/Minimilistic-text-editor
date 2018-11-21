@@ -40,7 +40,9 @@ except Exception as err:
         "textColor": "black",
         "cursorColor": "black",
         "cursorStyle": "xterm",
-        "ask before quit": "yes"
+        "ask before quit": "yes",
+        "padx": 3,
+        "pady": 1
     }
     root.lower()
     messagebox.showinfo('Oh No!', 'There was an error in the editorSettings.json file! ' + str(err))
@@ -62,8 +64,9 @@ editArea = scrollText.ScrolledText(
     highlightcolor=settings['backgroundColor'],
     selectborderwidth=0,
     highlightthickness=0,
-    padx=3,
-    undo=True,
+    padx=settings['padx'],
+    pady=settings['pady'],
+    undo=True
 )
 
 

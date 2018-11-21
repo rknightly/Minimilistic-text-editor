@@ -6,5 +6,7 @@
     "textColor": "black",
     "cursorColor": "black",
     "cursorStyle": "xterm",
-    "ask before quit": "yes"
+    "ask before quit": "yes",
+    "padx": 3,
+    "pady": 1
 }
