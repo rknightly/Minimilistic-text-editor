@@ -259,15 +259,21 @@ def editUndo(event=None):
 
 # copy command
 def editCopy(event=None):
-    root.clipboard_clear()
-    root.clipboard_append(editArea.get('sel.first', 'sel.last'))
-    
+    try:
+        root.clipboard_clear()
+        root.clipboard_append(editArea.get('sel.first', 'sel.last'))
+    except:
+        pass
+
 
 # cut command
 def editCut(event=None):
-    root.clipboard_clear()
-    root.clipboard_append(editArea.get('sel.first', 'sel.last'))
-    editArea.delete('sel.first', 'sel.last')
+    try:
+        root.clipboard_clear()
+        root.clipboard_append(editArea.get('sel.first', 'sel.last'))
+        editArea.delete('sel.first', 'sel.last')
+    except:
+        pass
     
 
 # paste command
