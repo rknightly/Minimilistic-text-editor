@@ -41,3 +41,7 @@ To open you editor settings go to settings -> prefrences to see a json file of m
 "cursorStyle" - the style of the cursor. NOTE: do not change unless you know what you are doing!
 
 "ask before quit" - ask if the user would like to save if they have unsaved changes. NOTE: if the option is not "yes" or "no" than the program wiil assume it is "yes!"
+
+"padx" - How much to the left is the text area.
+
+"pady" - How down is the text area.
