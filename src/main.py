@@ -330,12 +330,12 @@ menubar.add_cascade(label='File', menu=filemenu)
 
 
 editmenu = Menu(menubar, tearoff=0)
-editmenu.add_command(label='Undo', command=editUndo)
-editmenu.add_command(label='Redo', command=editRedo)
+editmenu.add_command(label='Undo  ' + commandKey + '-u', command=editUndo)
+editmenu.add_command(label='Redo  Shift-' + commandKey + '-u', command=editRedo)
 editmenu.add_separator()
-editmenu.add_command(label='Copy', command=editCopy)
-editmenu.add_command(label='Cut', command=editCut)
-editmenu.add_command(label='Paste', command=editPaste)
+editmenu.add_command(label='Copy  ' + commandKey + '-c', command=editCopy)
+editmenu.add_command(label='Cut  ' + commandKey + '-x', command=editCut)
+editmenu.add_command(label='Paste  ' + commandKey + '-v', command=editPaste)
 menubar.add_cascade(label='Edit', menu=editmenu)
 
 # create the 'settings menu'
