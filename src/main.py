@@ -53,7 +53,7 @@ root.background = settings['backgroundColor']
 
 
 # settings for the scrolledText widget
-editArea = scrollText.ScrolledText(
+textArea = scrollText.ScrolledText(
     root,
     font=(
         settings['fontName'],
@@ -72,8 +72,8 @@ editArea = scrollText.ScrolledText(
 )
 
 
-editArea.config(insertbackground=settings['cursorColor'])
-editArea.pack(expand=True, fill='both') # make the editor area cover most of the screen
+textArea.config(insertbackground=settings['cursorColor'])
+textArea.pack(expand=True, fill='both') # make the editor area cover most of the screen
 
 
 root.title(file_path)
@@ -81,16 +81,16 @@ root.title(file_path)
 
 # open a file
 def openFile(event=None):
-    global editArea
+    global textArea
     global file_path
     
-    editArea.config(state=NORMAL)
+    textArea.config(state=NORMAL)
     file_path = filedialog.askopenfilename()
     
     try:
         file = open(file_path, 'r')
-        editArea.delete(1.0, "end-1c")
-        editArea.insert(INSERT, file.read())
+        textArea.delete(1.0, "end-1c")
+        textArea.insert(INSERT, file.read())
         file.close()
         root.title(file_path)
         high()
@@ -101,19 +101,19 @@ def openFile(event=None):
 
 # create a new file
 def newFile(event=None):
-    global editArea
+    global textArea
     global file_path
 
-    editArea.config(state=NORMAL)
+    textArea.config(state=NORMAL)
     file_path = 'Untitled'
-    editArea.delete(1.0, "end-1c")
+    textArea.delete(1.0, "end-1c")
     root.title(file_path)
     return 'break'
 
 
 # save to the current file
 def saveFile(event=None):
-    global editArea
+    global textArea
     global file_path
 
     # if the user is not editing a file then create a new one
@@ -125,13 +125,13 @@ def saveFile(event=None):
     # if the user is editing the settings file save to 'editorSettings.py'
     elif file_path == 'Settings':
         file = open('editorSettings.json', 'w')
-        file.write(str(editArea.get(1.0, "end-1c")))
+        file.write(str(textArea.get(1.0, "end-1c")))
         file.close()
         root.title('Settings')
     # otherwise save the file
     else:
         file = open(file_path, 'w')
-        file.write(str(editArea.get(1.0, "end-1c")))
+        file.write(str(textArea.get(1.0, "end-1c")))
         file.close()
         root.title(file_path)
     return 'break'
@@ -139,13 +139,13 @@ def saveFile(event=None):
 
 # if tab is pressed enter the amount of space needed
 def insertTab(event=None):
-    editArea.insert(tkinter.INSERT, " " * settings['tabSize'])
+    textArea.insert(tkinter.INSERT, " " * settings['tabSize'])
     return 'break'
 
 
 # create a new file
 def saveAsFile(event=None):
-    global editArea
+    global textArea
     global file_path
     
     if file_path == 'Settings':
@@ -157,7 +157,7 @@ def saveAsFile(event=None):
         if file is None:
             return False
         
-        writeText = str(editArea.get(1.0, "end-1c"))
+        writeText = str(textArea.get(1.0, "end-1c"))
         file.write(writeText)
         file.close()
 
@@ -168,15 +168,15 @@ def saveAsFile(event=None):
 
 # open the userSettings file
 def openSettingsFile():
-    global editArea
+    global textArea
     global file_path
     global settingsState
 
     try:
-        editArea.config(state=NORMAL)
+        textArea.config(state=NORMAL)
         file = open('editorSettings.json', 'r')
-        editArea.delete(1.0, "end-1c")
-        editArea.insert(INSERT, file.read())
+        textArea.delete(1.0, "end-1c")
+        textArea.insert(INSERT, file.read())
         file.close()
         file_path = 'Settings'
         root.title('Settings')
@@ -186,14 +186,14 @@ def openSettingsFile():
 
 # opens a window with instuctions on how to use the text editor
 def showManual():
-    global editArea
+    global textArea
     global file_path
 
     manualFile = open('manual.txt', 'r')
-    editArea.delete(1.0, "end-1c")
-    editArea.insert(INSERT, manualFile.read())
+    textArea.delete(1.0, "end-1c")
+    textArea.insert(INSERT, manualFile.read())
     manualFile.close()
-    editArea.config(state=DISABLED)
+    textArea.config(state=DISABLED)
     root.title('Manual')
     file_path = 'Manual'
 
@@ -212,7 +212,7 @@ def askQuit(event=None):
         if file_path == 'Settings':
             data = open('editorSettings.json').read()
             
-            if data != str(editArea.get(1.0, "end-1c")):
+            if data != str(textArea.get(1.0, "end-1c")):
                 if messagebox.askyesno('Hold on!', 'Are you sure that you would like to quit? You have changes that you haven\'t saved!') == True:
                     return 0
                 else:
@@ -223,7 +223,7 @@ def askQuit(event=None):
             return 0             
         elif file_path != 'Untitled':
             data = open(file_path).read()
-            if data != str(editArea.get(1.0, "end-1c")):
+            if data != str(textArea.get(1.0, "end-1c")):
                 if messagebox.askyesno('Hold on!', 'Are you sure that you would like to quit? You have changes that you haven\'t saved!') == True:
                     return 0
                 else:
@@ -250,7 +250,7 @@ def quit(event=None):
 # redo command
 def editRedo(event=None):
     try:
-        editArea.edit_redo()
+        textArea.edit_redo()
     except:
         pass
 
@@ -258,7 +258,7 @@ def editRedo(event=None):
 # undo command
 def editUndo(event=None):
     try:
-        editArea.edit_undo()
+        textArea.edit_undo()
     except:
         pass
 
@@ -267,7 +267,7 @@ def editUndo(event=None):
 def editCopy(event=None):
     try:
         root.clipboard_clear()
-        root.clipboard_append(editArea.get('sel.first', 'sel.last'))
+        root.clipboard_append(textArea.get('sel.first', 'sel.last'))
     except:
         pass
 
@@ -276,31 +276,31 @@ def editCopy(event=None):
 def editCut(event=None):
     try:
         root.clipboard_clear()
-        root.clipboard_append(editArea.get('sel.first', 'sel.last'))
-        editArea.delete('sel.first', 'sel.last')
+        root.clipboard_append(textArea.get('sel.first', 'sel.last'))
+        textArea.delete('sel.first', 'sel.last')
     except:
         pass
     
 
 # paste command
 def editPaste(event=None):
-    editArea.insert(editArea.index(INSERT), root.clipboard_get())
+    textArea.insert(textArea.index(INSERT), root.clipboard_get())
 
 
 # syntax highlighting - I got this code from:
 # https://stackoverflow.com/questions/29688831/pygments-syntax-highlighter-in-python-tkinter-text-widget 
 # and modified it to use regex
 def highlightSyntax(word, color):
-    editArea.tag_remove(word, 1.0, tkinter.END)
+    textArea.tag_remove(word, 1.0, tkinter.END)
     first = '1.0'
     while True:
-        first = editArea.search(r'{}'.format(str(word)), first, nocase=False, stopindex=tkinter.END, regexp=True)
+        first = textArea.search(r'{}'.format(str(word)), first, nocase=False, stopindex=tkinter.END, regexp=True)
         if not first:
             break
         last = first + '+' + str(len(word))+ 'c'
-        editArea.tag_add(word, first, last)
+        textArea.tag_add(word, first, last)
         first = last
-    editArea.tag_config(word, foreground=str(color))
+    textArea.tag_config(word, foreground=str(color))
 
 
 # run every time key is pressed
@@ -353,7 +353,7 @@ menubar.add_cascade(label='Help', menu=helpmenu)
 root.config(menu=menubar)
 
 # used for customized tabs
-editArea.bind('<Tab>', insertTab)
+textArea.bind('<Tab>', insertTab)
 
 # mac has a built in Command-q
 if platform != 'darwin':
@@ -363,12 +363,12 @@ else:
 
 
 # add keyboard shorcuts
-editArea.bind('<Key>', high)
-editArea.bind('<Shift-' + commandKey + '-z>', editRedo)
-editArea.bind('<' + commandKey + '-n>', newFile)
-editArea.bind('<' + commandKey + '-s>', saveFile)
-editArea.bind('<' + commandKey + '-o>', openFile)
-editArea.bind('<' + commandKey + '-Shift-S>', saveAsFile)
+textArea.bind('<Key>', high)
+textArea.bind('<Shift-' + commandKey + '-z>', editRedo)
+textArea.bind('<' + commandKey + '-n>', newFile)
+textArea.bind('<' + commandKey + '-s>', saveFile)
+textArea.bind('<' + commandKey + '-o>', openFile)
+textArea.bind('<' + commandKey + '-Shift-S>', saveAsFile)
 
 
 root.protocol("WM_DELETE_WINDOW", quit)
