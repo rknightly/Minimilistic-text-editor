@@ -8,5 +8,22 @@
     "cursorStyle": "xterm",
     "ask before quit": "yes",
     "padx": 3,
-    "pady": 1
+    "pady": 1,
+    "syntax": {
+        ".py": {
+            "def": "orange",
+            "\"(.*?)\"": "green",
+            "'(.*?)'": "green"
+        },
+        ".js": {
+            "function": "orange",
+            "\"(.*?)\"": "green",
+            "'(.*?)'": "green"
+        },
+        ".ts": {
+            "function": "orange",
+            "\"(.*?)\"": "green",
+            "'(.*?)'": "green"
+        }
+    }
 }

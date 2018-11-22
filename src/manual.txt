@@ -45,3 +45,5 @@ To open you editor settings go to settings -> prefrences to see a json file of m
 "padx" - How much to the left is the text area.
 
 "pady" - How down is the text area.
+
+"syntax" - A placeholder for syntax configs. You can then put JSON objects named as file types with values inside of this option. You can use regex for the syntax options. NOTE: do NOT change the name of this option (if you do it will break stuff).

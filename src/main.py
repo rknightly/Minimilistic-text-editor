@@ -4,6 +4,7 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import filedialog
 from sys import platform, exit
+from os import path
 
 import tkinter
 import tkinter.scrolledtext as scrollText
@@ -42,7 +43,8 @@ except Exception as err:
         "cursorStyle": "xterm",
         "ask before quit": "yes",
         "padx": 3,
-        "pady": 1
+        "pady": 1,
+        "syntax": {}
     }
     root.lower()
     messagebox.showinfo('Oh No!', 'There was an error in the editorSettings.json file! ' + str(err))
@@ -91,6 +93,7 @@ def openFile(event=None):
         editArea.insert(INSERT, file.read())
         file.close()
         root.title(file_path)
+        high()
     except:
         return 'break'
     return 'break'
@@ -127,7 +130,7 @@ def saveFile(event=None):
         root.title('Settings')
     # otherwise save the file
     else:
-        file = open(str(file_path), 'w')
+        file = open(file_path, 'w')
         file.write(str(editArea.get(1.0, "end-1c")))
         file.close()
         root.title(file_path)
@@ -158,7 +161,7 @@ def saveAsFile(event=None):
         file.write(writeText)
         file.close()
 
-        file_path = file
+        file_path = file.name
         root.title(file.name)
     return 'break'
 
@@ -284,6 +287,34 @@ def editPaste(event=None):
     editArea.insert(editArea.index(INSERT), root.clipboard_get())
 
 
+# syntax highlighting - I got this code from:
+# https://stackoverflow.com/questions/29688831/pygments-syntax-highlighter-in-python-tkinter-text-widget 
+# and modified it to use regex
+def highlightSyntax(word, color):
+    editArea.tag_remove(word, 1.0, tkinter.END)
+    first = '1.0'
+    while True:
+        first = editArea.search(r'{}'.format(str(word)), first, nocase=False, stopindex=tkinter.END, regexp=True)
+        if not first:
+            break
+        last = first + '+' + str(len(word))+ 'c'
+        editArea.tag_add(word, first, last)
+        first = last
+    editArea.tag_config(word, foreground=str(color))
+
+
+# run every time key is pressed
+def high(event=None):
+    if file_path == "Untitled":
+        return 
+    filename, file_extension = path.splitext(file_path)
+    for item in list(settings['syntax'].keys()):
+        if item == file_extension:
+            for key, value in settings['syntax'][item].items():
+                highlightSyntax(key, value)
+            break
+            
+           
 
 menubar = Menu(root)
 
@@ -332,6 +363,7 @@ else:
 
 
 # add keyboard shorcuts
+editArea.bind('<Key>', high)
 editArea.bind('<Shift-' + commandKey + '-z>', editRedo)
 editArea.bind('<' + commandKey + '-n>', newFile)
 editArea.bind('<' + commandKey + '-s>', saveFile)
