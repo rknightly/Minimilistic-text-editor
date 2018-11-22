@@ -12,18 +12,18 @@
     "syntax": {
         ".py": {
             "def": "orange",
-            "\"(.*?)\"": "green",
-            "'(.*?)'": "green"
+            "\"": "green",
+            "'": "green"
         },
         ".js": {
             "function": "orange",
-            "\"(.*?)\"": "green",
-            "'(.*?)'": "green"
+            "\"": "green",
+            "'": "green"
         },
         ".ts": {
             "function": "orange",
-            "\"(.*?)\"": "green",
-            "'(.*?)'": "green"
+            "\"": "green",
+            "'": "green"
         }
     }
 }

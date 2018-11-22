@@ -291,13 +291,13 @@ def editPaste(event=None):
 # https://stackoverflow.com/questions/29688831/pygments-syntax-highlighter-in-python-tkinter-text-widget 
 # and modified it to use regex
 def highlightSyntax(word, color):
-    textArea.tag_remove(word, 1.0, tkinter.END)
-    first = '1.0'
+    textArea.tag_remove(word, 1.0, END)
+    first = 1.0
     while True:
-        first = textArea.search(r'{}'.format(str(word)), first, nocase=False, stopindex=tkinter.END, regexp=True)
+        first = textArea.search(r'{}'.format(str(word)), first, nocase=False, stopindex=END, regexp=False)
         if not first:
             break
-        last = first + '+' + str(len(word))+ 'c'
+        last = first + '+' + str(len(word)) + 'c'
         textArea.tag_add(word, first, last)
         first = last
     textArea.tag_config(word, foreground=str(color))
@@ -306,7 +306,7 @@ def highlightSyntax(word, color):
 # run every time key is pressed
 def high(event=None):
     if file_path == "Untitled":
-        return 
+        return
     filename, file_extension = path.splitext(file_path)
     for item in list(settings['syntax'].keys()):
         if item == file_extension:
