@@ -1,4 +1,4 @@
-Note: To exit this screen go to the file menu and open a file or make a new one. Keybindings will not work on this screen!
+Note: To exit this screen go click the button on the bottom.
 
 Saving Files
 ------------------------

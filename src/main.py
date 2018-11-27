@@ -71,6 +71,8 @@ textArea = scrollText.ScrolledText(
     undo=True
 )
 
+buttonThing = None
+
 
 textArea.config(insertbackground=settings['cursorColor'])
 textArea.pack(expand=True, fill='both') # make the editor area cover most of the screen
@@ -83,7 +85,10 @@ root.title(file_path)
 def openFile(event=None):
     global textArea
     global file_path
+    global file_path
     
+    buttonThing.destroy()
+    buttonThing = None
     textArea.config(state=NORMAL)
     file_path = filedialog.askopenfilename()
     
@@ -101,9 +106,12 @@ def openFile(event=None):
 
 # create a new file
 def newFile(event=None):
+    global buttonThing
     global textArea
     global file_path
 
+    buttonThing.destroy()
+    buttonThing = None
     textArea.config(state=NORMAL)
     file_path = 'Untitled'
     textArea.delete(1.0, "end-1c")
@@ -188,11 +196,14 @@ def openSettingsFile():
 def showManual():
     global textArea
     global file_path
+    global buttonThing
 
     manualFile = open('manual.txt', 'r')
     textArea.delete(1.0, "end-1c")
     textArea.insert(INSERT, manualFile.read())
     manualFile.close()
+    buttonThing = Button(root, text='Exit Manual', command = newFile) 
+    buttonThing.pack()
     textArea.config(state=DISABLED)
     root.title('Manual')
     file_path = 'Manual'
