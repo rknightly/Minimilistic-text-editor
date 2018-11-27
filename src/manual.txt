@@ -1,4 +1,4 @@
-Note: To exit this screen go click the button on the bottom.
+Note: To exit this screen click the button on the bottom.
 
 Saving Files
 ------------------------
