@@ -86,9 +86,14 @@ def openFile(event=None):
     global textArea
     global file_path
     global file_path
+    global buttonThing
     
-    buttonThing.destroy()
-    buttonThing = None
+    try:
+        buttonThing.destroy()
+        buttonThing = None
+    except:
+        buttonThing = None
+    
     textArea.config(state=NORMAL)
     file_path = filedialog.askopenfilename()
     
@@ -110,8 +115,12 @@ def newFile(event=None):
     global textArea
     global file_path
 
-    buttonThing.destroy()
-    buttonThing = None
+    try:
+        buttonThing.destroy()
+        buttonThing = None
+    except:
+        buttonThing = None
+    
     textArea.config(state=NORMAL)
     file_path = 'Untitled'
     textArea.delete(1.0, "end-1c")
