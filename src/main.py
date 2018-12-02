@@ -11,12 +11,14 @@ import tkinter.scrolledtext as scrollText
 from json import load
 
 
-
-extra = None
-commandKey = ''
+# this variable is VERY IMPORTANT as it is used to store the file path for the current file that is being edited.
+# It is required to store the file path so that the program can write to the file
 file_path = 'Untitled'
 
 # check platform the user is on
+# these conditional statements are used to create a variable named commandKey.
+# the variable 'commandKey' is used for determining if the user will be using Command (if they are on mac) or
+# Control (if they are not on mac)
 if platform == 'darwin':
     # if the user is on mac use Command for keyboard shorcuts
     commandKey = 'Command'
@@ -25,16 +27,25 @@ else:
     commandKey = 'Control'
 
 
+# main variable for the window
 root = Tk()
+
+# uses the derpy_pencil.png file as an icon (only works for Windows)
 root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file=path.dirname(path.abspath(__file__)) + '/derpy_pencil.png'))
+
+# changes the minimum size of the window
 root.minsize(450, 450)
 
 
 # try to load the json settings
 try:
+    # create the variable settings for storing the settings of the editor
     settings = load(open(path.dirname(path.abspath(__file__)) + '/editorSettings.json', 'r'))
-# if there is an error
+# if there is an error in editorSettings.json
+# NOTE: If you are NOT familiar with JSON then you need to know that if the JSON syntax is done wrong then an error
+# will be raised.
 except Exception as err:
+    # if there are errors then make the settings variable equal to some premade settings
     settings = {
         "fontName": "default",
         "fontSize": 12,
@@ -48,13 +59,17 @@ except Exception as err:
         "pady": 1,
         "syntax": {}
     }
+    # hide root
     root.lower()
+
+    # open a messagebox with an error. NOTE: this is temporary and will be changed
     messagebox.showinfo('Oh No!', 'There was an error in the editorSettings.json file! ' + str(err))
 
+# set the background color of root to the 'backgroundColor' item of settings
 root.background = settings['backgroundColor']
 
 
-# settings for the scrolledText widget
+# settings for the scrolledText widget. NOTE: the attributes of 'textArea' will rely on the settings dictonary.
 textArea = scrollText.ScrolledText(
     root,
     font=(
@@ -62,7 +77,7 @@ textArea = scrollText.ScrolledText(
         settings['fontSize']
     ),
 
-    cursor=settings['cursorStyle'],
+    cursor=settings['cursorStyle'], # WARNING: if you do not know what you are doing this line of code can break the editor!
     background=settings['backgroundColor'],
     foreground=settings['textColor'],
     highlightcolor=settings['backgroundColor'],
@@ -73,32 +88,45 @@ textArea = scrollText.ScrolledText(
     undo=True
 )
 
+# this variable is used for a button that appears when the user opens up the manual.
+# The button is used for a user friendly exit
 buttonThing = None
 
 
+# change the cursor color of textArea to the item 'cursorColor' of settings
 textArea.config(insertbackground=settings['cursorColor'])
 textArea.pack(expand=True, fill='both') # make the editor area cover most of the screen
 
 
+# make the title of the window the file_path
 root.title(file_path)
 
 
 # open a file
 def openFile(event=None):
+    # get global variables needed
     global textArea
     global file_path
     global file_path
     global buttonThing
 
+    # try to destroy the button.
+    # A try and except statement is required here so that if 'buttonThing' is not an actuall button the program
+    # won't raise an error
     try:
         buttonThing.destroy()
         buttonThing = None
     except:
         buttonThing = None
 
+    # turn the 'textArea' widget to be read and write.
+    # Needed becuase when the user looks at the manual the 'textArea' widget turns to be read only
     textArea.config(state=NORMAL)
+
+    # open a dialog to open a file
     file_path = filedialog.askopenfilename()
 
+    # try to open the file. If it does not work do nothing
     try:
         file = open(file_path, 'r')
         textArea.delete(1.0, "end-1c")
@@ -113,6 +141,7 @@ def openFile(event=None):
 
 # create a new file
 def newFile(event=None):
+    # get global variables needed
     global buttonThing
     global textArea
     global file_path
@@ -132,6 +161,7 @@ def newFile(event=None):
 
 # save to the current file
 def saveFile(event=None):
+    # get global variables needed
     global textArea
     global file_path
 
@@ -164,9 +194,12 @@ def insertTab(event=None):
 
 # create a new file
 def saveAsFile(event=None):
+    # get global variables needed
     global textArea
     global file_path
 
+    # if the file path is either 'Settings' or 'Manual' don't do anything
+    # Otherwise ask to save as file
     if file_path == 'Settings':
         pass
     if file_path == 'Manual':
@@ -174,7 +207,7 @@ def saveAsFile(event=None):
     else:
         file = filedialog.asksaveasfile(mode='w')
         if file is None:
-            return False
+            return False # needed when the user exits
 
         writeText = str(textArea.get(1.0, "end-1c"))
         file.write(writeText)
@@ -187,6 +220,7 @@ def saveAsFile(event=None):
 
 # open the userSettings file
 def openSettingsFile():
+    # get global variables needed
     global textArea
     global file_path
     global settingsState
@@ -205,6 +239,7 @@ def openSettingsFile():
 
 # opens a window with instuctions on how to use the text editor
 def showManual():
+    # get global variables needed
     global textArea
     global file_path
     global buttonThing
