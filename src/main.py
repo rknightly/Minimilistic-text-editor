@@ -59,11 +59,7 @@ except Exception as err:
         "pady": 1,
         "syntax": {}
     }
-    # hide root
-    root.lower()
-
-    # open a messagebox with an error. NOTE: this is temporary and will be changed
-    messagebox.showinfo('Oh No!', 'There was an error in the editorSettings.json file! ' + str(err))
+    jsonError = str(err) # used for line 431
 
 # set the background color of root to the 'backgroundColor' item of settings
 root.background = settings['backgroundColor']
@@ -88,9 +84,9 @@ textArea = scrollText.ScrolledText(
     undo=True
 )
 
-# this variable is used for a button that appears when the user opens up the manual.
-# The button is used for a user friendly exit
-buttonThing = None
+# this variable is used for a button that appears when the user opens up the manual or if there was a json error.
+# The button is used for a user friendly exit.
+exitButton = None
 
 
 # change the cursor color of textArea to the item 'cursorColor' of settings
@@ -108,16 +104,16 @@ def openFile(event=None):
     global textArea
     global file_path
     global file_path
-    global buttonThing
+    global exitButton
 
     # try to destroy the button.
-    # A try and except statement is required here so that if 'buttonThing' is not an actuall button the program
+    # A try and except statement is required here so that if 'exitButton' is not an actuall button the program
     # won't raise an error
     try:
-        buttonThing.destroy()
-        buttonThing = None
+        exitButton.destroy()
+        exitButton = None
     except:
-        buttonThing = None
+        exitButton = None
 
     # turn the 'textArea' widget to be read and write.
     # Needed becuase when the user looks at the manual the 'textArea' widget turns to be read only
@@ -142,15 +138,15 @@ def openFile(event=None):
 # create a new file
 def newFile(event=None):
     # get global variables needed
-    global buttonThing
+    global exitButton
     global textArea
     global file_path
 
     try:
-        buttonThing.destroy()
-        buttonThing = None
+        exitButton.destroy()
+        exitButton = None
     except:
-        buttonThing = None
+        exitButton = None
 
     textArea.config(state=NORMAL)
     file_path = 'Untitled'
@@ -242,14 +238,14 @@ def showManual():
     # get global variables needed
     global textArea
     global file_path
-    global buttonThing
+    global exitButton
 
     manualFile = open(path.dirname(path.abspath(__file__)) + '/manual.txt', 'r')
     textArea.delete(1.0, "end-1c")
     textArea.insert(INSERT, manualFile.read())
     manualFile.close()
-    buttonThing = Button(root, text='Exit Manual', command = newFile)
-    buttonThing.pack()
+    exitButton = Button(root, text='Exit Manual', command = newFile)
+    exitButton.pack()
     textArea.config(state=DISABLED)
     root.title('Manual')
     file_path = 'Manual'
@@ -430,6 +426,16 @@ textArea.bind('<' + commandKey + '-Shift-S>', saveAsFile)
 
 
 root.protocol("WM_DELETE_WINDOW", quit)
+
+# if there was an json error
+if jsonError != '':
+    textArea.insert(INSERT, 'There was an error in the editorSettings.json file!\n\n' + str(jsonError))
+    textArea.config(state=DISABLED)
+    file_path = 'Oh, no! There was a Json error!'
+    exitButton = Button(root, text='Exit Manual', command = newFile)
+    exitButton.pack()
+    root.title(file_path)
+    del jsonError
 
 
 def main():
