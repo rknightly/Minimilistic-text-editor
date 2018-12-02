@@ -10,6 +10,8 @@ import tkinter
 import tkinter.scrolledtext as scrollText
 from json import load
 
+
+
 extra = None
 commandKey = ''
 file_path = 'Untitled'
@@ -24,17 +26,17 @@ else:
 
 
 root = Tk()
-root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='derpy_pencil.png'))
+root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file=path.dirname(path.abspath(__file__)) + '/derpy_pencil.png'))
 root.minsize(450, 450)
 
 
 # try to load the json settings
 try:
-    settings = load(open('editorSettings.json', 'r'))
+    settings = load(open(path.dirname(path.abspath(__file__)) + '/editorSettings.json', 'r'))
 # if there is an error
 except Exception as err:
     settings = {
-        "fontName": "default", 
+        "fontName": "default",
         "fontSize": 12,
         "tabSize": 2,
         "backgroundColor": "white",
@@ -59,7 +61,7 @@ textArea = scrollText.ScrolledText(
         settings['fontName'],
         settings['fontSize']
     ),
-    
+
     cursor=settings['cursorStyle'],
     background=settings['backgroundColor'],
     foreground=settings['textColor'],
@@ -87,16 +89,16 @@ def openFile(event=None):
     global file_path
     global file_path
     global buttonThing
-    
+
     try:
         buttonThing.destroy()
         buttonThing = None
     except:
         buttonThing = None
-    
+
     textArea.config(state=NORMAL)
     file_path = filedialog.askopenfilename()
-    
+
     try:
         file = open(file_path, 'r')
         textArea.delete(1.0, "end-1c")
@@ -120,7 +122,7 @@ def newFile(event=None):
         buttonThing = None
     except:
         buttonThing = None
-    
+
     textArea.config(state=NORMAL)
     file_path = 'Untitled'
     textArea.delete(1.0, "end-1c")
@@ -141,7 +143,7 @@ def saveFile(event=None):
         return True
     # if the user is editing the settings file save to 'editorSettings.py'
     elif file_path == 'Settings':
-        file = open('editorSettings.json', 'w')
+        file = open(path.dirname(path.abspath(__file__)) + '/editorSettings.json', 'w')
         file.write(str(textArea.get(1.0, "end-1c")))
         file.close()
         root.title('Settings')
@@ -164,7 +166,7 @@ def insertTab(event=None):
 def saveAsFile(event=None):
     global textArea
     global file_path
-    
+
     if file_path == 'Settings':
         pass
     if file_path == 'Manual':
@@ -173,7 +175,7 @@ def saveAsFile(event=None):
         file = filedialog.asksaveasfile(mode='w')
         if file is None:
             return False
-        
+
         writeText = str(textArea.get(1.0, "end-1c"))
         file.write(writeText)
         file.close()
@@ -191,7 +193,7 @@ def openSettingsFile():
 
     try:
         textArea.config(state=NORMAL)
-        file = open('editorSettings.json', 'r')
+        file = open(path.dirname(path.abspath(__file__)) + '/editorSettings.json', 'r')
         textArea.delete(1.0, "end-1c")
         textArea.insert(INSERT, file.read())
         file.close()
@@ -207,11 +209,11 @@ def showManual():
     global file_path
     global buttonThing
 
-    manualFile = open('manual.txt', 'r')
+    manualFile = open(path.dirname(path.abspath(__file__)) + '/manual.txt', 'r')
     textArea.delete(1.0, "end-1c")
     textArea.insert(INSERT, manualFile.read())
     manualFile.close()
-    buttonThing = Button(root, text='Exit Manual', command = newFile) 
+    buttonThing = Button(root, text='Exit Manual', command = newFile)
     buttonThing.pack()
     textArea.config(state=DISABLED)
     root.title('Manual')
@@ -225,22 +227,24 @@ def showAbout():
 
 
 # if the user tries to quit without saving ask them if they would like to save
+# Note: if the function returns 1 then the window will not be destroyed.
+# This is used becuase in earlier versions of this text editor would quit when the user never intended to quit.
 def askQuit(event=None):
     if settings['ask before quit'] == 'no':
         root.quit()
     else:
         if file_path == 'Settings':
-            data = open('editorSettings.json').read()
-            
+            data = open(path.dirname(path.abspath(__file__)) + '/editorSettings.json').read()
+
             if data != str(textArea.get(1.0, "end-1c")):
                 if messagebox.askyesno('Hold on!', 'Are you sure that you would like to quit? You have changes that you haven\'t saved!') == True:
                     return 0
                 else:
                     return 1
             else:
-                return 0   
+                return 0
         elif file_path == 'Manual':
-            return 0             
+            return 0
         elif file_path != 'Untitled':
             data = open(file_path).read()
             if data != str(textArea.get(1.0, "end-1c")):
@@ -300,7 +304,7 @@ def editCut(event=None):
         textArea.delete('sel.first', 'sel.last')
     except:
         pass
-    
+
 
 # paste command
 def editPaste(event=None):
@@ -308,8 +312,7 @@ def editPaste(event=None):
 
 
 # syntax highlighting - I got this code from:
-# https://stackoverflow.com/questions/29688831/pygments-syntax-highlighter-in-python-tkinter-text-widget 
-# and modified it to use regex
+# https://stackoverflow.com/questions/29688831/pygments-syntax-highlighter-in-python-tkinter-text-widget
 def highlightSyntax(word, color):
     textArea.tag_remove(word, 1.0, END)
     first = 1.0
@@ -333,8 +336,8 @@ def high(event=None):
             for key, value in settings['syntax'][item].items():
                 highlightSyntax(key, value)
             break
-            
-           
+
+
 
 menubar = Menu(root)
 
