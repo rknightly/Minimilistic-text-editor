@@ -49,6 +49,8 @@ try:
 # NOTE: If you are NOT familiar with JSON then you need to know that if the JSON syntax is done wrong then an error
 # will be raised.
 except Exception as err:
+    exitRootButton = None
+
     # if there are errors then make the settings variable equal to some premade settings
     settings = {
         "fontName": "default",
@@ -145,10 +147,13 @@ def newFile(event=None):
     global exitButton
     global textArea
     global file_path
+    global exitRootButton
 
     try:
         exitButton.destroy()
         exitButton = None
+        exitRootButton.destroy()
+        del exitRootButton
     except:
         exitButton = None
 
@@ -281,13 +286,16 @@ def askQuit(event=None):
         elif file_path == 'Manual':
             return 0
         elif file_path != 'Untitled':
-            data = open(file_path).read()
-            if data != str(textArea.get(1.0, "end-1c")):
-                if messagebox.askyesno('Hold on!', 'Are you sure that you would like to quit? You have changes that you haven\'t saved!') == True:
-                    return 0
+            try:
+                data = open(file_path).read()
+                if data != str(textArea.get(1.0, "end-1c")):
+                    if messagebox.askyesno('Hold on!', 'Are you sure that you would like to quit? You have changes that you haven\'t saved!') == True:
+                        return 0
+                    else:
+                        return 1
                 else:
-                    return 1
-            else:
+                    return 0
+            except:
                 return 0
         else:
             if messagebox.askyesno('Hold on!', 'Are you sure you would not like to save \'Untitled\'?') == True:
@@ -436,8 +444,10 @@ if jsonError != '':
     textArea.insert(INSERT, 'There was an error in the editorSettings.json file!\n\n' + str(jsonError))
     textArea.config(state=DISABLED)
     file_path = 'Oh, no! There was a Json error!'
-    exitButton = Button(root, text='Exit Manual', command = newFile)
+    exitButton = Button(root, text='Got it!', command = newFile)
+    exitRootButton = Button(root, text='Exit Application', fg='red', command = lambda: exit(0))
     exitButton.pack()
+    exitRootButton.pack()
     root.title(file_path)
     del jsonError # get rid of jsonError
 else:
