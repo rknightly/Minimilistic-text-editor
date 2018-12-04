@@ -8,7 +8,7 @@
   "cursorStyle": "xterm",
   "ask before quit": "yes",
   "padx": 3,
-  "pady": 1
+  "pady": 1,
   "syntax": {
     ".py": {
       "def": "orange",
