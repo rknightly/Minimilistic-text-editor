@@ -15,6 +15,9 @@ from json import load
 # It is required to store the file path so that the program can write to the file
 file_path = 'Untitled'
 
+# used if there was a JSON error
+jsonError = ''
+
 # check platform the user is on
 # these conditional statements are used to create a variable named commandKey.
 # the variable 'commandKey' is used for determining if the user will be using Command (if they are on mac) or
@@ -41,6 +44,7 @@ root.minsize(450, 450)
 try:
     # create the variable settings for storing the settings of the editor
     settings = load(open(path.dirname(path.abspath(__file__)) + '/editorSettings.json', 'r'))
+
 # if there is an error in editorSettings.json
 # NOTE: If you are NOT familiar with JSON then you need to know that if the JSON syntax is done wrong then an error
 # will be raised.
@@ -435,7 +439,9 @@ if jsonError != '':
     exitButton = Button(root, text='Exit Manual', command = newFile)
     exitButton.pack()
     root.title(file_path)
-    del jsonError
+    del jsonError # get rid of jsonError
+else:
+    del jsonError # get rid of jsonError
 
 
 def main():
