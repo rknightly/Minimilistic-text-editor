@@ -191,12 +191,6 @@ def saveFile(event=None):
     return 'break'
 
 
-# if tab is pressed enter the amount of space needed
-def insertTab(event=None):
-    textArea.insert(tkinter.INSERT, " " * settings['tabSize'])
-    return 'break'
-
-
 # create a new file
 def saveAsFile(event=None):
     # get global variables needed
@@ -256,9 +250,8 @@ def showManual():
     exitButton = Button(root, text='Exit Manual', command = newFile)
     exitButton.pack()
     textArea.config(state=DISABLED)
-    root.title('Manual')
     file_path = 'Manual'
-
+    root.title(file_path)
 
 
 # show a messagebox about the aplication
@@ -307,6 +300,39 @@ def askQuit(event=None):
                     return 0
 
 
+# syntax highlighting - I got this code from:
+# https://stackoverflow.com/questions/29688831/pygments-syntax-highlighter-in-python-tkinter-text-widget
+def highlightSyntax(word, color):
+    textArea.tag_remove(word, 1.0, END)
+    first = 1.0
+    while True:
+        first = textArea.search(r'{}'.format(str(word)), first, nocase=False, stopindex=END, regexp=False)
+        if not first:
+            break
+        last = first + '+' + str(len(word)) + 'c'
+        textArea.tag_add(word, first, last)
+        first = last
+    textArea.tag_config(word, foreground=str(color))
+
+
+# run every time key is pressed
+def high(event=None):
+    if file_path == "Untitled":
+        return
+    filename, file_extension = path.splitext(file_path)
+    for item in list(settings['syntax'].keys()):
+        if item == file_extension:
+            for key, value in settings['syntax'][item].items():
+                highlightSyntax(key, value)
+            break
+
+
+# if tab is pressed enter the amount of space needed
+def insertTab(event=None):
+    textArea.insert(tkinter.INSERT, " " * settings['tabSize'])
+    return 'break'
+
+
 # used to break the program
 def quit(event=None):
     if askQuit() == 0:
@@ -352,34 +378,6 @@ def editCut(event=None):
 # paste command
 def editPaste(event=None):
     textArea.insert(textArea.index(INSERT), root.clipboard_get())
-
-
-# syntax highlighting - I got this code from:
-# https://stackoverflow.com/questions/29688831/pygments-syntax-highlighter-in-python-tkinter-text-widget
-def highlightSyntax(word, color):
-    textArea.tag_remove(word, 1.0, END)
-    first = 1.0
-    while True:
-        first = textArea.search(r'{}'.format(str(word)), first, nocase=False, stopindex=END, regexp=False)
-        if not first:
-            break
-        last = first + '+' + str(len(word)) + 'c'
-        textArea.tag_add(word, first, last)
-        first = last
-    textArea.tag_config(word, foreground=str(color))
-
-
-# run every time key is pressed
-def high(event=None):
-    if file_path == "Untitled":
-        return
-    filename, file_extension = path.splitext(file_path)
-    for item in list(settings['syntax'].keys()):
-        if item == file_extension:
-            for key, value in settings['syntax'][item].items():
-                highlightSyntax(key, value)
-            break
-
 
 
 menubar = Menu(root)
@@ -449,9 +447,8 @@ if jsonError != '':
     exitButton.pack()
     exitRootButton.pack()
     root.title(file_path)
-    del jsonError # get rid of jsonError
-else:
-    del jsonError # get rid of jsonError
+
+del jsonError # get rid of jsonError
 
 
 def main():
