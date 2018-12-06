@@ -11,17 +11,16 @@ import tkinter.scrolledtext as scrollText
 from json import load
 
 
-# this variable is VERY IMPORTANT as it is used to store the file path for the current file that is being edited.
-# It is required to store the file path so that the program can write to the file
-file_path = 'Untitled'
+# Path of the file currently being edited
+openFilePath = 'Untitled'
 
 # used if there was a JSON error
 jsonError = ''
 
 # check platform the user is on
 # these conditional statements are used to create a variable named commandKey.
-# the variable 'commandKey' is used for determining if the user will be using Command (if they are on mac) or
-# Control (if they are not on mac)
+# the variable 'commandKey' is used for determining if the user will be using 
+# Command (if they are on mac) or Control (if they are not on mac)
 if platform == 'darwin':
     # if the user is on mac use Command for keyboard shorcuts
     commandKey = 'Command'
@@ -34,7 +33,9 @@ else:
 root = Tk()
 
 # uses the derpy_pencil.png file as an icon (only works for Windows)
-root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file=path.dirname(path.abspath(__file__)) + '/derpy_pencil.png'))
+root.tk.call('wm', 
+             'iconphoto',
+             root._w, PhotoImage(file=path.dirname(path.abspath(__file__)) + '/derpy_pencil.png'))
 
 # changes the minimum size of the window
 root.minsize(450, 450)
@@ -94,26 +95,23 @@ textArea = scrollText.ScrolledText(
 # The button is used for a user friendly exit.
 exitButton = None
 
-
 # change the cursor color of textArea to the item 'cursorColor' of settings
 textArea.config(insertbackground=settings['cursorColor'])
 textArea.pack(expand=True, fill='both') # make the editor area cover most of the screen
 
-
-# make the title of the window the file_path
-root.title(file_path)
+# make the title of the window the openFilePath
+root.title(openFilePath)
 
 
 # open a file
 def openFile(event=None):
     # get global variables needed
     global textArea
-    global file_path
-    global file_path
+    global openFilePath
     global exitButton
 
     # try to destroy the button.
-    # A try and except statement is required here so that if 'exitButton' is not an actuall button the program
+    # A try and except statement is required here so that if 'exitButton' is not an actually a button the program
     # won't raise an error
     try:
         exitButton.destroy()
@@ -126,15 +124,15 @@ def openFile(event=None):
     textArea.config(state=NORMAL)
 
     # open a dialog to open a file
-    file_path = filedialog.askopenfilename()
+    openFilePath = filedialog.askopenfilename()
 
     # try to open the file. If it does not work do nothing
     try:
-        file = open(file_path, 'r')
+        file = open(openFilePath, 'r')
         textArea.delete(1.0, "end-1c")
         textArea.insert(INSERT, file.read())
         file.close()
-        root.title(file_path)
+        root.title(openFilePath)
         high()
     except:
         return 'break'
@@ -146,7 +144,7 @@ def newFile(event=None):
     # get global variables needed
     global exitButton
     global textArea
-    global file_path
+    global openFilePath
     global exitRootButton
 
     try:
@@ -158,9 +156,9 @@ def newFile(event=None):
         exitButton = None
 
     textArea.config(state=NORMAL)
-    file_path = 'Untitled'
+    openFilePath = 'Untitled'
     textArea.delete(1.0, "end-1c")
-    root.title(file_path)
+    root.title(openFilePath)
     return 'break'
 
 
@@ -168,26 +166,26 @@ def newFile(event=None):
 def saveFile(event=None):
     # get global variables needed
     global textArea
-    global file_path
+    global openFilePath
 
     # if the user is not editing a file then create a new one
-    if file_path == 'Untitled':
+    if openFilePath == 'Untitled':
         if saveAsFile() == False:
             return False
-    if file_path == 'Manual':
+    if openFilePath == 'Manual':
         return True
     # if the user is editing the settings file save to 'editorSettings.py'
-    elif file_path == 'Settings':
+    elif openFilePath == 'Settings':
         file = open(path.dirname(path.abspath(__file__)) + '/editorSettings.json', 'w')
         file.write(str(textArea.get(1.0, "end-1c")))
         file.close()
         root.title('Settings')
     # otherwise save the file
     else:
-        file = open(file_path, 'w')
+        file = open(openFilePath, 'w')
         file.write(str(textArea.get(1.0, "end-1c")))
         file.close()
-        root.title(file_path)
+        root.title(openFilePath)
     return 'break'
 
 
@@ -195,13 +193,13 @@ def saveFile(event=None):
 def saveAsFile(event=None):
     # get global variables needed
     global textArea
-    global file_path
+    global openFilePath
 
     # if the file path is either 'Settings' or 'Manual' don't do anything
     # Otherwise ask to save as file
-    if file_path == 'Settings':
+    if openFilePath == 'Settings':
         pass
-    if file_path == 'Manual':
+    if openFilePath == 'Manual':
         pass
     else:
         file = filedialog.asksaveasfile(mode='w')
@@ -212,7 +210,7 @@ def saveAsFile(event=None):
         file.write(writeText)
         file.close()
 
-        file_path = file.name
+        openFilePath = file.name
         root.title(file.name)
     return 'break'
 
@@ -221,7 +219,7 @@ def saveAsFile(event=None):
 def openSettingsFile():
     # get global variables needed
     global textArea
-    global file_path
+    global openFilePath
     global settingsState
 
     try:
@@ -230,7 +228,7 @@ def openSettingsFile():
         textArea.delete(1.0, "end-1c")
         textArea.insert(INSERT, file.read())
         file.close()
-        file_path = 'Settings'
+        openFilePath = 'Settings'
         root.title('Settings')
     except:
         return
@@ -240,7 +238,7 @@ def openSettingsFile():
 def showManual():
     # get global variables needed
     global textArea
-    global file_path
+    global openFilePath
     global exitButton
 
     manualFile = open(path.dirname(path.abspath(__file__)) + '/manual.txt', 'r')
@@ -250,54 +248,47 @@ def showManual():
     exitButton = Button(root, text='Exit Manual', command = newFile)
     exitButton.pack()
     textArea.config(state=DISABLED)
-    file_path = 'Manual'
-    root.title(file_path)
+    openFilePath = 'Manual'
+    root.title(openFilePath)
 
 
 # show a messagebox about the aplication
 def showAbout():
-    messagebox.showinfo('About', 'Author: John Paul Antonovich\n\nLicense: MIT\n\nDescription: A simple text editor built with Python and the Tkinter library. If you like to know more read the README of this program!\n\n Repository: http://github.com/hatOnABox/Simple-Text-Editor')
+    messagebox.showinfo('About', 'Author: John Paul Antonovich\n\nLicense: MIT\n\nDescription: '
+        'A simple text editor built with Python and the Tkinter library. If you like to know more'
+        ' read the README of this program!\n\n Repository: http://github.com/hatOnABox/'
+        'Simple-Text-Editor')
 
 
 # if the user tries to quit without saving ask them if they would like to save
-# Note: if the function returns 1 then the window will not be destroyed.
+# Note: if the function returns False then the window will not be destroyed.
 # This is used becuase in earlier versions of this text editor would quit when the user never intended to quit.
 def askQuit(event=None):
     if settings['ask before quit'] == 'no':
         root.quit()
-    else:
-        if file_path == 'Settings':
-            data = open(path.dirname(path.abspath(__file__)) + '/editorSettings.json').read()
+    if openFilePath == 'Manual':
+        return True
+    if openFilePath == 'Settings':
+        data = open(path.dirname(path.abspath(__file__)) + '/editorSettings.json').read()
 
-            if data != str(textArea.get(1.0, "end-1c")):
-                if messagebox.askyesno('Hold on!', 'Are you sure that you would like to quit? You have changes that you haven\'t saved!') == True:
-                    return 0
-                else:
-                    return 1
-            else:
-                return 0
-        elif file_path == 'Manual':
-            return 0
-        elif file_path != 'Untitled':
-            try:
-                data = open(file_path).read()
-                if data != str(textArea.get(1.0, "end-1c")):
-                    if messagebox.askyesno('Hold on!', 'Are you sure that you would like to quit? You have changes that you haven\'t saved!') == True:
-                        return 0
-                    else:
-                        return 1
-                else:
-                    return 0
-            except:
-                return 0
-        else:
-            if messagebox.askyesno('Hold on!', 'Are you sure you would not like to save \'Untitled\'?') == True:
-                return 0
-            else:
-                if saveFile() == False:
-                    return 1
-                else:
-                    return 0
+        if data == str(textArea.get(1.0, "end-1c")):
+            return True
+        return messagebox.askyesno('Hold on!', 'Are you sure that you would like to quit?'
+                                    ' You have changes that you haven\'t saved!')
+    if openFilePath == 'Untitled':
+        if messagebox.askyesno('Hold on!', 'Are you sure you would not like to save'
+                                   ' \'Untitled\'?'):
+            return True
+        return saveFile()
+
+    try:
+        data = open(openFilePath).read()
+        if data == str(textArea.get(1.0, "end-1c")):
+            return True
+        return messagebox.askyesno('Hold on!', 'Are you sure that you would like to quit? '
+                                   'You have changes that you haven\'t saved!')
+    except:
+        return True
 
 
 # syntax highlighting - I got this code from:
@@ -317,9 +308,9 @@ def highlightSyntax(word, color):
 
 # run every time key is pressed
 def high(event=None):
-    if file_path == "Untitled":
+    if openFilePath == "Untitled":
         return
-    filename, file_extension = path.splitext(file_path)
+    filename, file_extension = path.splitext(openFilePath)
     for item in list(settings['syntax'].keys()):
         if item == file_extension:
             for key, value in settings['syntax'][item].items():
@@ -335,7 +326,7 @@ def insertTab(event=None):
 
 # used to break the program
 def quit(event=None):
-    if askQuit() == 0:
+    if askQuit():
         root.quit()
         exit(0)
 
@@ -392,7 +383,6 @@ filemenu.add_separator()
 filemenu.add_command(label='Exit  ' + commandKey + '-q', command=quit)
 menubar.add_cascade(label='File', menu=filemenu)
 
-
 editmenu = Menu(menubar, tearoff=0)
 editmenu.add_command(label='Undo  ' + commandKey + '-u', command=editUndo)
 editmenu.add_command(label='Redo  Shift-' + commandKey + '-u', command=editRedo)
@@ -425,7 +415,6 @@ if platform != 'darwin':
 else:
     root.createcommand('exit', quit)
 
-
 # add keyboard shorcuts
 textArea.bind('<Key>', high)
 textArea.bind('<Shift-' + commandKey + '-z>', editRedo)
@@ -434,19 +423,18 @@ textArea.bind('<' + commandKey + '-s>', saveFile)
 textArea.bind('<' + commandKey + '-o>', openFile)
 textArea.bind('<' + commandKey + '-Shift-S>', saveAsFile)
 
-
 root.protocol("WM_DELETE_WINDOW", quit)
 
 # if there was an json error
 if jsonError != '':
     textArea.insert(INSERT, 'There was an error in the editorSettings.json file!\n\n' + str(jsonError))
     textArea.config(state=DISABLED)
-    file_path = 'Oh, no! There was a Json error!'
+    openFilePath = 'Oh, no! There was a Json error!'
     exitButton = Button(root, text='Got it!', command = newFile)
     exitRootButton = Button(root, text='Exit Application', fg='red', command = lambda: exit(0))
     exitButton.pack()
     exitRootButton.pack()
-    root.title(file_path)
+    root.title(openFilePath)
 
 del jsonError # get rid of jsonError
 
