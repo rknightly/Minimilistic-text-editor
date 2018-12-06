@@ -370,6 +370,15 @@ def editCut(event=None):
 def editPaste(event=None):
     textArea.insert(textArea.index(INSERT), root.clipboard_get())
 
+def increaseFont(event=None):
+    currentFont = int(textArea['font'].split(' ')[-1])
+    textArea.config(font=(settings['fontName'], currentFont+1))
+
+
+def decreaseFont(event=None):
+    currentFont = int(textArea['font'].split(' ')[-1])
+    textArea.config(font=(settings['fontName'], currentFont-1))
+
 
 menubar = Menu(root)
 
@@ -397,6 +406,12 @@ settingsmenu = Menu(menubar, tearoff=0)
 settingsmenu.add_command(label='Open Prefrences', command=openSettingsFile)
 menubar.add_cascade(label='Settings', menu=settingsmenu)
 
+# create the 'view menu'
+viewmenu = Menu(menubar, tearoff=0)
+viewmenu.add_command(label='Increase Font   ' + commandKey + ' /', command=increaseFont)
+viewmenu.add_command(label='Decrease Font   ' + commandKey + ' \\', command=decreaseFont)
+menubar.add_cascade(label='View', menu=viewmenu)
+
 # create the 'help menu'
 helpmenu = Menu(menubar, tearoff=0)
 helpmenu.add_command(label='About', command=showAbout)
@@ -422,6 +437,8 @@ textArea.bind('<' + commandKey + '-n>', newFile)
 textArea.bind('<' + commandKey + '-s>', saveFile)
 textArea.bind('<' + commandKey + '-o>', openFile)
 textArea.bind('<' + commandKey + '-Shift-S>', saveAsFile)
+textArea.bind('<' + commandKey + '-/>', increaseFont)
+textArea.bind('<' + commandKey + '--\\>', decreaseFont)
 
 root.protocol("WM_DELETE_WINDOW", quit)
 
